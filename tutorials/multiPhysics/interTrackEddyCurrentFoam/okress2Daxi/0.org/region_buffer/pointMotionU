@@ -1,0 +1,56 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       pointVectorField;
+    object      pointMotionU;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions          [0 1 -1 0 0 0 0];
+
+internalField       uniform (0 0 0);
+
+boundaryField
+{
+    axis
+    {
+        type            slip;
+    }
+    front
+    {
+        type            wedge;
+    }
+    back
+    {
+        type            wedge;
+    }
+    infinity
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+    trackedSurface
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    "procBoundary.*"
+    {
+        type            processor;
+        value           $internalField;
+    }
+    global
+    {
+        type            global;
+    }
+}
+
+// ************************************************************************* //

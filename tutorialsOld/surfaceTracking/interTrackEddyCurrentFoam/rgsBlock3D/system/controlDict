@@ -1,0 +1,70 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// ************************* SIMLUTAITON TIMES ***************************** //
+
+application         interTrackEddyCurrentFoam;
+// application         eddyCurrentFoam;
+
+startFrom           latestTime;
+
+startTime           0.0;
+
+stopAt              endTime;
+
+endTime             20.0;
+
+// *************************** TIME STEPPING ******************************* //
+
+deltaT              0.001;
+
+adjustTimeStep      yes;
+
+maxCo               0.1;
+
+maxDeltaT           0.001;
+
+// *************************** OUTPUT SETTINGS ***************************** //
+
+writeControl        adjustableRunTime;
+
+writeInterval       0.01;
+
+purgeWrite          0;
+
+cycleWrite          0;
+
+writeFormat         binary; // ascii
+
+writePrecision      8;
+
+writeCompression    uncompressed;
+
+timeFormat          general;
+
+timePrecision       8;
+
+// **************************** OTHER SETTINGS ***************************** //
+
+runTimeModifiable   yes;
+
+// **************************** DEBUG SWITCHES ***************************** //
+
+// *************************** FUNCTION OBJECTS **************************** //
+
+// ******************************* LIBRARIES ******************************* //
+
+// ************************************************************************* //

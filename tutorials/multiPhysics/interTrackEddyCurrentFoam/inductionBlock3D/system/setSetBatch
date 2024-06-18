@@ -1,0 +1,108 @@
+### Geometry
+
+# All
+
+cellSet  cellSet_geometry_all             new    boxToCell      (-1 -1 -1) ( 1  1  1)
+
+# Fluid
+
+pointSet pointSet_geometry_fluid          new    surfaceToPoint "constant/triSurface/geometry_fluid.stl" 2e-4 true false
+
+cellSet  cellSet_geometry_fluid           new    pointToCell    pointSet_geometry_fluid all
+
+pointSet pointSet_geometry_fluid          remove
+
+# Conductor
+
+cellSet cellSet_geometry_conductor        new    setToCell      cellSet_geometry_fluid
+
+# Background
+
+cellSet  cellSet_geometry_space           new    setToCell      cellSet_geometry_all
+cellSet  cellSet_geometry_space           delete setToCell      cellSet_geometry_conductor
+cellSet  cellSet_geometry_space_old       remove
+
+# Buffer
+
+pointSet pointSet_geometry_buffer         new    surfaceToPoint "constant/triSurface/geometry_buffer.stl" 2e-4 true false
+
+cellSet  cellSet_geometry_buffer          new    pointToCell    pointSet_geometry_buffer all
+
+pointSet pointSet_geometry_buffer         remove
+
+# Background
+
+cellSet  cellSet_geometry_background      new    setToCell      cellSet_geometry_space
+
+
+
+### Outer/Inner boundaries
+
+pointSet pointSet_geometry_trackedSurface new    surfaceToPoint "constant/triSurface/geometry_boundary_trackedSurface.stl" 2e-4 false false
+pointSet pointSet_geometry_sideWall       new    surfaceToPoint "constant/triSurface/geometry_boundary_sideWall.stl" 2e-4 false false
+pointSet pointSet_geometry_bottomWall     new    surfaceToPoint "constant/triSurface/geometry_boundary_bottomWall.stl" 2e-4 false false
+pointSet pointSet_geometry_fixedMesh      new    surfaceToPoint "constant/triSurface/geometry_boundary_fixedMesh.stl" 2e-4 false false
+
+faceSet  faceSet_geometry_trackedSurface  new    pointToFace    pointSet_geometry_trackedSurface all
+faceSet  faceSet_geometry_sideWall        new    pointToFace    pointSet_geometry_sideWall all
+faceSet  faceSet_geometry_bottomWall      new    pointToFace    pointSet_geometry_bottomWall all
+faceSet  faceSet_geometry_fixedMesh       new    pointToFace    pointSet_geometry_fixedMesh all
+
+faceSet  faceSet_geometry_infinity        new    boundaryToFace
+
+pointSet pointSet_geometry_trackedSurface remove
+pointSet pointSet_geometry_sideWall      remove
+pointSet pointSet_geometry_bottomWall     remove
+pointSet pointSet_geometry_fixedMesh      remove
+
+
+
+### Materials
+
+cellSet cellSet_material_liquidMetal      new    setToCell      cellSet_geometry_conductor
+
+cellSet cellSet_material_air              new    setToCell      cellSet_geometry_background
+
+
+
+### Regions
+
+cellSet cellSet_region_fluid              new    setToCell      cellSet_geometry_conductor
+
+cellSet cellSet_region_buffer             new    setToCell      cellSet_geometry_buffer
+
+cellSet cellSet_region_static             new    setToCell      cellSet_geometry_all
+cellSet cellSet_region_static             delete setToCell      cellSet_region_fluid
+cellSet cellSet_region_static             delete setToCell      cellSet_geometry_buffer
+cellSet cellSet_region_static_old         remove
+
+cellSet cellSet_region_conductor          new    setToCell      cellSet_geometry_conductor
+
+cellSet cellSet_region_space              new    setToCell      cellSet_geometry_space
+
+faceSet faceSet_regions1                  new    cellToFace     cellSet_region_fluid all
+faceSet faceSet_regions1                  delete cellToFace     cellSet_region_fluid both
+faceSet faceSet_regions1                  add    cellToFace     cellSet_region_buffer all
+faceSet faceSet_regions1                  delete cellToFace     cellSet_region_buffer both
+faceSet faceSet_regions1                  add    cellToFace     cellSet_region_static all
+faceSet faceSet_regions1                  delete cellToFace     cellSet_region_static both
+faceSet faceSet_regions1_old              remove
+
+faceSet faceSet_regions2                  new    cellToFace     cellSet_region_conductor all
+faceSet faceSet_regions2                  delete cellToFace     cellSet_region_conductor both
+faceSet faceSet_regions2                  add    cellToFace     cellSet_region_space all
+faceSet faceSet_regions2                  delete cellToFace     cellSet_region_space both
+faceSet faceSet_regions2_old              remove
+
+faceSet faceSet_regions                   new    setToFace      faceSet_regions1
+faceSet faceSet_regions                   add    setToFace      faceSet_regions2
+faceSet faceSet_regions                   delete setToFace      faceSet_geometry_infinity
+faceSet faceSet_regions1                  remove
+faceSet faceSet_regions2                  remove
+faceSet faceSet_regions_old               remove
+
+
+
+### End
+
+quit

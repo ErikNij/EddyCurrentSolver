@@ -1,0 +1,14 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # run from this directory
+set -x
+
+
+wclean all freeSurface || exit 1
+wclean all freeSurface.new || exit 1
+
+wclean interFreeFoam || exit 1
+wclean interFreeFoam.new || exit 1
+
+wclean all trackedSurface || exit 1
+
+wclean interTrackFoam || exit 1

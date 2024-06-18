@@ -1,0 +1,138 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+inside      (1e-2 0.0 0.0);
+
+// finer       4;
+// fine        3;
+// coarse      2;
+// coarser     1;
+finer       3;
+// finer       2;
+fine        2;
+coarse      2;
+coarser     1;
+
+// ************************************************************************* //
+
+// Flags for optional output
+// 0 : only write final meshes
+// 1 : write intermediate meshes
+// 2 : write volScalarField with cellLevel for postprocessing
+// 4 : write current intersections as .obj files
+debug 0;
+
+// Merge tolerance. Is fraction of overall bounding box of initial mesh.
+// Note: the write tolerance needs to be higher than this.
+mergeTolerance 1e-8;
+
+// Meshing steps
+castellatedMesh true;
+snap            false;
+addLayers       false;
+
+geometry
+{
+    // WARNING: We do refinement in the 2D grid!
+    geometry_body_fluid_2D.stl
+    {
+        type    triSurfaceMesh;
+        name    body_fluid;
+    }
+
+    // WARNING: We do refinement in the 2D grid!
+    geometry_body_vessel_2D.stl
+    {
+        type    triSurfaceMesh;
+        name    body_vessel;
+    }
+
+    space_refine_coarse
+    {
+        type    searchableBox;
+        min     ( 0.00000 -1.00000 -0.1000);
+        max     ( 0.14000  1.00000  0.4830);
+    }
+
+    space_refine_coarser
+    {
+        type    searchableBox;
+        min     ( 0.00000 -1.00000 -0.2000);
+        max     ( 0.20000  1.00000  0.5830);
+    }
+};
+
+castellatedMeshControls
+{
+
+    maxLocalCells 100000;
+    maxGlobalCells 2000000;
+    minRefinementCells 0;
+    nCellsBetweenLevels 2;
+
+    features
+    (
+    );
+
+    refinementSurfaces
+    {
+//         body_fluid
+//         {
+//             level (2 2);
+//             faceZone fluid;
+//             cellZone fluid;
+//             zoneInside yes;
+//         }
+    }
+
+    resolveFeatureAngle 30;
+
+    refinementRegions
+    {
+        body_fluid
+        {
+            mode inside;
+            levels ((1e-15 $finer));
+        }
+
+        body_vessel
+        {
+            mode inside;
+            levels ((1e-15 $coarser));
+        }
+
+        space_refine_coarse
+        {
+            mode inside;
+            levels ((1e-15 $coarse));
+        }
+
+        space_refine_coarser
+        {
+            mode inside;
+            levels ((1e-15 $coarser));
+        }
+    }
+
+    locationInMesh $inside;
+    allowFreeStandingZoneFaces no;
+}
+
+#include "snappyHexMeshDict.include.meshQualityControls"
+#include "snappyHexMeshDict.include.snapControls"
+#include "snappyHexMeshDict.include.addLayersControls"
+
+// ************************************************************************* //

@@ -1,0 +1,4 @@
+
+laplaceFoam.C
+
+EXE = $(FOAM_APPBIN)/laplaceFoam

@@ -1,0 +1,24 @@
+
+./numerics/liqudFilmFvMotionSolver/liquidFilmFvMotionSolver.C
+./numerics/liqudFilmParallelFvMotionSolver/liquidFilmParallelFvMotionSolver.C
+./numerics/patchCorrectedSnGrad/patchCorrectedSnGrads.C
+./numerics/skewCorrectedSnGrad/skewCorrectedSnGrads.C
+./numerics/ddtSchemes/EulerDdtScheme.C
+./numerics/ddtSchemes/backwardDdtScheme.C
+
+fvPatchFields/extrapolated/extrapolatedFvPatchFields.C
+
+fvPatchFields/correctedFvPatchFields/correctedFvPatchField/correctedFvPatchFields.C
+fvPatchFields/correctedFvPatchFields/basicCorrectedFvPatchFields/fixedValue/fixedValueCorrectedFvPatchFields.C
+fvPatchFields/correctedFvPatchFields/basicCorrectedFvPatchFields/fixedGradient/fixedGradientCorrectedFvPatchFields.C
+fvPatchFields/correctedFvPatchFields/basicCorrectedFvPatchFields/zeroGradient/zeroGradientCorrectedFvPatchFields.C
+
+
+freeSurface.C
+makeFreeSurfaceData.C
+freeSurfacePointDisplacement.C
+freeSurfaceMoveFixedPatches.C
+
+faMesh.C
+
+LIB = $(FOAM_USER_LIBBIN)/libnewFreeSurface

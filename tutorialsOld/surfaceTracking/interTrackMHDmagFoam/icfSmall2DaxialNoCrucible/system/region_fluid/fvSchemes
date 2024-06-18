@@ -1,0 +1,90 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default                               backward;
+}
+
+gradSchemes
+{
+    default                               none;
+    grad(U)                               Gauss linear;
+    snGradCorr(U)                         Gauss linear;
+    grad(p)                               Gauss linear;
+    snGradCorr(p)                         Gauss linear;
+    grad(k)                               Gauss linear;
+    snGradCorr(k)                         Gauss linear;
+    grad(omega)                           Gauss linear;
+    snGradCorr(omega)                     Gauss linear;
+    grad(epsilon)                         Gauss linear;
+    snGradCorr(epsilon)                   Gauss linear;
+    grad(nuTilda)                         Gauss linear;
+    snGradCorr(nuTilda)                   Gauss linear;
+    grad(pB)                              Gauss linear;
+    snGradCorr(cellMotionU)               Gauss linear;
+}
+
+divSchemes
+{
+    default                               none;
+    div(phi,U)                            Gauss GammaVDC 0.5;
+    div(phi,k)                            Gauss Gamma 0.5;
+    div(phi,epsilon)                      Gauss Gamma 0.5;
+    div(phi,omega)                        Gauss Gamma 0.5;
+    div(phi,nuTilda)                      Gauss Gamma 0.5;
+    div((nuEff*dev(grad(U).T())))         Gauss linear;
+
+    // debug
+    div(U)                                Gauss linear;
+    div(phi)                              Gauss linear;
+}
+
+laplacianSchemes
+{
+    default                               none;
+    laplacian(rAU,p)                      Gauss linear corrected;
+    laplacian(rAUf,p)                     Gauss linear corrected;
+    laplacian(nuEff,U)                    Gauss linear corrected;
+    laplacian(DkEff,k)                    Gauss linear corrected;
+    laplacian(DomegaEff,omega)            Gauss linear corrected;
+    laplacian(DepsilonEff,epsilon)        Gauss linear corrected;
+    laplacian(DnuTildaEff,nuTilda)        Gauss linear corrected;
+    laplacian(diffusivity,cellMotionU)    Gauss linear corrected;
+}
+
+interpolationSchemes
+{
+    default                               none;
+    interpolate(U)                        linear;
+    interpolate(HbyA)                     linear;
+    interpolate(rAU)                      linear;
+    interpolate(F)                        linear;
+    interpolate(y)                        linear;
+}
+
+snGradSchemes
+{
+    default                               none;
+    snGrad(p)                             corrected;
+}
+
+fluxRequired
+{
+    p;
+}
+
+// ************************************************************************* //

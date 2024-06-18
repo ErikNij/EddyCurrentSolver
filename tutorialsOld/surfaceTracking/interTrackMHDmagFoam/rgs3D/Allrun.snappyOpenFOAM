@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# NOTE: To be used only with OpenFOAM 2.2.0 +
+
+# Remove old polyMesh
+rm -rf constant/polyMesh
+
+# Get blockMeshDict.py script from storage folder
+mkdir 'constant/polyMesh'
+cp -r 'constant/polyMesh.org/blockMeshDict.py' 'constant/polyMesh/'
+
+# Create blockMeshDict
+./constant/polyMesh/blockMeshDict.py
+
+# Run blockMesh
+blockMesh
+
+# Run snappyHexMesh (needs OpenFOAM 2.2.0 + for featureSnapping)
+snappyHexMesh -overwrite
+
+# Remove empty patches
+createPatch -overwrite
+
+# Copy new polyMesh files to storage folder
+cp 'constant/polyMesh/boundary' \
+   'constant/polyMesh/faces' \
+   'constant/polyMesh/neighbour' \
+   'constant/polyMesh/owner' \
+   'constant/polyMesh/points' \
+   'constant/polyMesh.org/'

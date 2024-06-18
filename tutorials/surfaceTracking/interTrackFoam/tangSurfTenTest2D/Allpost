@@ -1,0 +1,10 @@
+#!/bin/bash
+
+dt='0.1'
+omitlT='200'
+omitrT='50'
+fo='postProcessing/patchAverage_trackedSurface/0/c'
+fodt="$fo-dt$dt.dat"
+cat "$fo" | awk '(NR>1)' | awk '(NR>0)' | awk '(NR<1000100000000)' | awk '!(NR%1)' | awk '{ print $2 }' > "$fodt"
+# cat "$fo" | awk '(NR>1)' | awk '(NR>2000)' | awk '(NR<10001)' | awk '!(NR%1)' | awk '{ print $2 }' > "$fodt"
+foamUserToolFourierTransform "$fodt" "$dt" "$omitlT" "$omitrT"

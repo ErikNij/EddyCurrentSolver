@@ -1,0 +1,125 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      funkySetFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+materialProperties
+(
+  "sigma_silicon_liquid=1.2e+6;"    // Conductivity of liquid silicon in [S/m]
+  "sigma_graphite=1.25e+5;"         // Conductivity of graphite in [S/m]
+  "sigma_silicon_solid=8.3e+4;"     // Conductivity of solid silicon in [S/m]
+);
+
+conductorData
+(
+  "coil_rms=1000.0;"                // Inductor current rms value in [A]
+  "coil_x0=0.065;"                  // Inductor center line x position in [m]
+  "coil_dz=0.013;"                  // Inductor loop z offset in [m]
+  "coil_z0=0.0096;"                 // Inductor base z offset in [m]
+  "coil_ldx=0.005;"                 // Inductor loop cross section x width in [m]
+  "coil_ldz=0.005;"                 // Inductor loop cross section z width in [m]
+  "coil_area=coil_ldx*coil_ldz;"    // Inductor cross section area in [m^2]
+  "coil_amp=sqrt(2)*coil_rms;"      // Inductor current amplitude in [A]
+  "coil_den=coil_amp/coil_area;"    // Inductor current density in [A/m^2]
+);
+
+expressions
+(
+
+  sigma_reset
+  {
+    field         sigma;
+    expression    "0";
+  }
+
+  sigma_liquidSilicon
+  {
+    field         sigma;
+    variables     $materialProperties;
+    expression    "sigma_silicon_liquid";
+    condition     "set(cellSet_material_silicon_liquid)";
+  }
+
+  sigma_graphite
+  {
+    field         sigma;
+    variables     $materialProperties;
+    expression    "sigma_graphite";
+    condition     "set(cellSet_material_graphite)";
+  }
+
+  sigma_solidSilicon
+  {
+    field         sigma;
+    variables     $materialProperties;
+    expression    "sigma_silicon_solid";
+    condition     "set(cellSet_material_silicon_solid)";
+  }
+
+  coil_reset
+  {
+    field         jsRe;
+    expression    "vector (0,0,0)";
+  }
+
+  coil_left_0
+  {
+    field         jsRe;
+    variables     $conductorData;
+    expression    "vector (0,-coil_den,0)";
+    condition     "(pos().x>=-coil_x0-coil_ldx/2) && (pos().x<=-coil_x0+coil_ldx/2) && (pos().z>=coil_z0+0*coil_dz-coil_ldz/2) && (pos().z<=coil_z0+0*coil_dz+coil_ldz/2)";
+  }
+
+  coil_left_1
+  {
+    field         jsRe;
+    variables     $conductorData;
+    expression    "vector (0,-coil_den,0)";
+    condition     "(pos().x>=-coil_x0-coil_ldx/2) && (pos().x<=-coil_x0+coil_ldx/2) && (pos().z>=coil_z0+1*coil_dz-coil_ldz/2) && (pos().z<=coil_z0+1*coil_dz+coil_ldz/2)";
+  }
+
+  coil_left_2
+  {
+    field         jsRe;
+    variables     $conductorData;
+    expression    "vector (0,-coil_den,0)";
+    condition     "(pos().x>=-coil_x0-coil_ldx/2) && (pos().x<=-coil_x0+coil_ldx/2) && (pos().z>=coil_z0+2*coil_dz-coil_ldz/2) && (pos().z<=coil_z0+2*coil_dz+coil_ldz/2)";
+  }
+
+  coil_right_0
+  {
+    field         jsRe;
+    variables     $conductorData;
+    expression    "vector (0,coil_den,0)";
+    condition     "(pos().x>=coil_x0-coil_ldx/2) && (pos().x<=coil_x0+coil_ldx/2) && (pos().z>=coil_z0+0*coil_dz-coil_ldz/2) && (pos().z<=coil_z0+0*coil_dz+coil_ldz/2)";
+  }
+
+  coil_right_1
+  {
+    field         jsRe;
+    variables     $conductorData;
+    expression    "vector (0,coil_den,0)";
+    condition     "(pos().x>=coil_x0-coil_ldx/2) && (pos().x<=coil_x0+coil_ldx/2) && (pos().z>=coil_z0+1*coil_dz-coil_ldz/2) && (pos().z<=coil_z0+1*coil_dz+coil_ldz/2)";
+  }
+
+  coil_right_2
+  {
+    field         jsRe;
+    variables     $conductorData;
+    expression    "vector (0,coil_den,0)";
+    condition     "(pos().x>=coil_x0-coil_ldx/2) && (pos().x<=coil_x0+coil_ldx/2) && (pos().z>=coil_z0+2*coil_dz-coil_ldz/2) && (pos().z<=coil_z0+2*coil_dz+coil_ldz/2)";
+  }
+);
+
+// ************************************************************************* //

@@ -1,0 +1,157 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default                               backward;
+}
+
+gradSchemes
+{
+    default                               none;
+    grad(U)                               Gauss linear;
+    snGradCorr(U)                         Gauss linear;
+    grad(p)                               Gauss linear;
+    snGradCorr(p)                         Gauss linear;
+    grad(k)                               Gauss linear;
+    snGradCorr(k)                         Gauss linear;
+    grad(omega)                           Gauss linear;
+    snGradCorr(omega)                     Gauss linear;
+    grad(epsilon)                         Gauss linear;
+    snGradCorr(epsilon)                   Gauss linear;
+    grad(nuTilda)                         Gauss linear;
+    snGradCorr(nuTilda)                   Gauss linear;
+    grad(pB)                              Gauss linear;
+    snGradCorr(cellMotionU)               Gauss linear;
+//     grad(U)                               cellLimited Gauss linear 1.0;
+//     snGradCorr(U)                         cellLimited Gauss linear 1.0;
+//     grad(p)                               cellLimited Gauss linear 1.0;
+//     snGradCorr(p)                         cellLimited Gauss linear 1.0;
+//     grad(k)                               cellLimited Gauss linear 1.0;
+//     snGradCorr(k)                         cellLimited Gauss linear 1.0;
+//     grad(omega)                           cellLimited Gauss linear 1.0;
+//     snGradCorr(omega)                     cellLimited Gauss linear 1.0;
+//     grad(epsilon)                         cellLimited Gauss linear 1.0;
+//     snGradCorr(epsilon)                   cellLimited Gauss linear 1.0;
+//     grad(nuTilda)                         cellLimited Gauss linear 1.0;
+//     snGradCorr(nuTilda)                   cellLimited Gauss linear 1.0;
+//     grad(pB)                              cellLimited Gauss linear 1.0;
+//     snGradCorr(cellMotionU)               cellLimited Gauss linear 1.0;
+//     grad(U)                               leastSquares;
+//     snGradCorr(U)                         leastSquares;
+//     grad(p)                               leastSquares;
+//     snGradCorr(p)                         leastSquares;
+//     grad(k)                               leastSquares;
+//     snGradCorr(k)                         leastSquares;
+//     grad(omega)                           leastSquares;
+//     snGradCorr(omega)                     leastSquares;
+//     grad(epsilon)                         leastSquares;
+//     snGradCorr(epsilon)                   leastSquares;
+//     grad(nuTilda)                         leastSquares;
+//     snGradCorr(nuTilda)                   leastSquares;
+//     grad(pB)                              leastSquares;
+//     snGradCorr(cellMotionU)               leastSquares;
+//     grad(U)                               cellLimited leastSquares 1.0;
+//     snGradCorr(U)                         cellLimited leastSquares 1.0;
+//     grad(p)                               cellLimited leastSquares 1.0;
+//     snGradCorr(p)                         cellLimited leastSquares 1.0;
+//     grad(k)                               cellLimited leastSquares 1.0;
+//     snGradCorr(k)                         cellLimited leastSquares 1.0;
+//     grad(omega)                           cellLimited leastSquares 1.0;
+//     snGradCorr(omega)                     cellLimited leastSquares 1.0;
+//     grad(epsilon)                         cellLimited leastSquares 1.0;
+//     snGradCorr(epsilon)                   cellLimited leastSquares 1.0;
+//     grad(nuTilda)                         cellLimited leastSquares 1.0;
+//     snGradCorr(nuTilda)                   cellLimited leastSquares 1.0;
+//     grad(pB)                              cellLimited leastSquares 1.0;
+//     snGradCorr(cellMotionU)               cellLimited leastSquares 1.0;
+}
+
+divSchemes
+{
+    default                               none;
+    div(phi,U)                            Gauss GammaVDC 0.5;
+    div(phi,k)                            Gauss Gamma 0.5;
+    div(phi,epsilon)                      Gauss Gamma 0.5;
+    div(phi,omega)                        Gauss Gamma 0.5;
+    div(phi,nuTilda)                      Gauss Gamma 0.5;
+//     div(phi,U)                            Gauss upwind;
+//     div(phi,k)                            Gauss upwind;
+//     div(phi,epsilon)                      Gauss upwind;
+//     div(phi,omega)                        Gauss upwind;
+//     div(phi,nuTilda)                      Gauss upwind;
+    div((nuEff*dev(grad(U).T())))         Gauss linear;
+
+    // debug
+    div(U)                                Gauss linear;
+    div(phi)                              Gauss linear;
+}
+
+laplacianSchemes
+{
+    default                               none;
+//     laplacian(rAU,p)                      Gauss linear corrected;
+//     laplacian(rAUf,p)                     Gauss linear corrected;
+//     laplacian(rAU,p)                      Gauss linear limited 0.5;
+//     laplacian(rAUf,p)                     Gauss linear limited 0.5;
+    laplacian(rAU,p)                      Gauss linear limited 0.3333;
+    laplacian(rAUf,p)                     Gauss linear limited 0.3333;
+//     laplacian(rAU,p)                      Gauss linear skewCorrected 0.3333;
+//     laplacian(rAUf,p)                     Gauss linear skewCorrected 0.3333;
+    laplacian(nuEff,U)                    Gauss linear corrected;
+    laplacian(DkEff,k)                    Gauss linear corrected;
+    laplacian(DomegaEff,omega)            Gauss linear corrected;
+    laplacian(DepsilonEff,epsilon)        Gauss linear corrected;
+    laplacian(DnuTildaEff,nuTilda)        Gauss linear corrected;
+    laplacian(diffusivity,cellMotionU)    Gauss linear corrected;
+//     laplacian(nuEff,U)                    Gauss linear skewCorrected 0.3333;
+//     laplacian(DkEff,k)                    Gauss linear skewCorrected 0.3333;
+//     laplacian(DomegaEff,omega)            Gauss linear skewCorrected 0.3333;
+//     laplacian(DepsilonEff,epsilon)        Gauss linear skewCorrected 0.3333;
+//     laplacian(DnuTildaEff,nuTilda)        Gauss linear skewCorrected 0.3333;
+//     laplacian(diffusivity,cellMotionU)    Gauss linear skewCorrected 0.3333;
+}
+
+interpolationSchemes
+{
+    default                               none;
+    interpolate(U)                        linear;
+    interpolate(HbyA)                     linear;
+    interpolate(rAU)                      linear;
+    interpolate(F)                        linear;
+    interpolate(y)                        linear;
+//     interpolate(U)                        skewCorrected linear 1.0;
+//     interpolate(HbyA)                     skewCorrected linear 1.0;
+//     interpolate(rAU)                      skewCorrected linear 1.0;
+//     interpolate(F)                        skewCorrected linear 1.0;
+//     interpolate(y)                        skewCorrected linear 1.0;
+}
+
+snGradSchemes
+{
+    default                               none;
+//     snGrad(p)                             corrected;
+//     snGrad(p)                             limited 0.5;
+    snGrad(p)                             limited 0.3333;
+//     snGrad(p)                             skewCorrected 0.3333;
+}
+
+fluxRequired
+{
+    p;
+}
+
+// ************************************************************************* //

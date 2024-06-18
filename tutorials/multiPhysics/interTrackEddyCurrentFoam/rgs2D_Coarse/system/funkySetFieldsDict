@@ -1,0 +1,94 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      funkySetFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+inductorData
+(
+    "coil_rms=1000.0;"                // Inductor current rms value in [A]
+    "coil_x0=0.065;"                  // Inductor center line x position in [m]
+    "coil_dz=0.013;"                  // Inductor loop z offset in [m]
+    "coil_z0=0.0096;"                 // Inductor base z offset in [m]
+    "coil_ldx=0.005;"                 // Inductor loop cross section x width in [m]
+    "coil_ldz=0.005;"                 // Inductor loop cross section z width in [m]
+    "coil_area=coil_ldx*coil_ldz;"    // Inductor cross section area in [m^2]
+    "coil_amp=sqrt(2)*coil_rms;"      // Inductor current amplitude in [A]
+    "coil_den=coil_amp/coil_area;"    // Inductor current density in [A/m^2]
+);
+
+expressions
+(
+    coil_reset
+    {
+        field         j0Re;
+        expression    "vector (0,0,0)";
+        keepPatches   true;
+    }
+
+    coil_left_0
+    {
+        field         j0Re;
+        variables     $inductorData;
+        expression    "vector (0,-coil_den,0)";
+        condition     "(pos().x>=-coil_x0-coil_ldx/2) && (pos().x<=-coil_x0+coil_ldx/2) && (pos().z>=coil_z0+0*coil_dz-coil_ldz/2) && (pos().z<=coil_z0+0*coil_dz+coil_ldz/2)";
+        keepPatches   true;
+    }
+
+    coil_left_1
+    {
+        field         j0Re;
+        variables     $inductorData;
+        expression    "vector (0,-coil_den,0)";
+        condition     "(pos().x>=-coil_x0-coil_ldx/2) && (pos().x<=-coil_x0+coil_ldx/2) && (pos().z>=coil_z0+1*coil_dz-coil_ldz/2) && (pos().z<=coil_z0+1*coil_dz+coil_ldz/2)";
+        keepPatches   true;
+    }
+
+    coil_left_2
+    {
+        field         j0Re;
+        variables     $inductorData;
+        expression    "vector (0,-coil_den,0)";
+        condition     "(pos().x>=-coil_x0-coil_ldx/2) && (pos().x<=-coil_x0+coil_ldx/2) && (pos().z>=coil_z0+2*coil_dz-coil_ldz/2) && (pos().z<=coil_z0+2*coil_dz+coil_ldz/2)";
+        keepPatches   true;
+    }
+
+    coil_right_0
+    {
+        field         j0Re;
+        variables     $inductorData;
+        expression    "vector (0,coil_den,0)";
+        condition     "(pos().x>=coil_x0-coil_ldx/2) && (pos().x<=coil_x0+coil_ldx/2) && (pos().z>=coil_z0+0*coil_dz-coil_ldz/2) && (pos().z<=coil_z0+0*coil_dz+coil_ldz/2)";
+        keepPatches   true;
+    }
+
+    coil_right_1
+    {
+        field         j0Re;
+        variables     $inductorData;
+        expression    "vector (0,coil_den,0)";
+        condition     "(pos().x>=coil_x0-coil_ldx/2) && (pos().x<=coil_x0+coil_ldx/2) && (pos().z>=coil_z0+1*coil_dz-coil_ldz/2) && (pos().z<=coil_z0+1*coil_dz+coil_ldz/2)";
+        keepPatches   true;
+    }
+
+    coil_right_2
+    {
+        field         j0Re;
+        variables     $inductorData;
+        expression    "vector (0,coil_den,0)";
+        condition     "(pos().x>=coil_x0-coil_ldx/2) && (pos().x<=coil_x0+coil_ldx/2) && (pos().z>=coil_z0+2*coil_dz-coil_ldz/2) && (pos().z<=coil_z0+2*coil_dz+coil_ldz/2)";
+        keepPatches   true;
+    }
+);
+
+// ************************************************************************* //

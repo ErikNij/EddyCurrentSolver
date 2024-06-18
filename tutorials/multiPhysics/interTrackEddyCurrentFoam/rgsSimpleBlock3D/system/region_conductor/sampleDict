@@ -1,0 +1,99 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      createPatchDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// interpolationScheme:
+//   cell           Cell-centre value assumed constant over cell
+//   cellPoint      Linear weighted interpolation using cell values
+//   cellPointFace  Mixed linear weighted / cell-face interpolation
+// interpolationScheme cell;
+// interpolationScheme cellPoint;
+interpolationScheme cellPointFace;
+
+// setFormat:
+//   raw      Raw ASCII data in columns
+//   gnuplot  Data in gnuplot format
+//   xmgr     Data in Grace/xmgr format
+//   jplot    Data in jPlot format
+setFormat          raw;
+
+// surfaceFormat:
+//   null      Suppresses output
+//   foamFile  points, faces, values file
+//   dx        DX scalar or vector format
+//   vtk       VTK ASCII format
+//   raw       xyz values for use with e.g. gnuplotsplot
+//   stl       ASCII STL; just surface, no values
+surfaceFormat      null;
+
+sets
+(
+    line_x1
+    {
+        type       uniform;
+        axis       x;
+        start      (-0.0350 -0.0740  0.0100);
+        end        ( 0.0350 -0.0740  0.0100);
+        nPoints    57;
+    }
+
+    line_y1
+    {
+        type       uniform;
+        axis       y;
+        start      ( 0.0000 -0.0750  0.0190);
+        end        ( 0.0000  0.0750  0.0190);
+        nPoints    121;
+    }
+
+    line_y2
+    {
+        type       uniform;
+        axis       y;
+        start      ( 0.0300 -0.0750  0.0100);
+        end        ( 0.0300  0.0750  0.0100);
+        nPoints    121;
+    }
+
+    line_z1
+    {
+        type       uniform;
+        axis       z;
+        start      ( 0.0340 -0.0375  0.0200);
+        end        ( 0.0340 -0.0375  0.0000);
+        nPoints    17;
+    }
+);
+
+surfaces
+(
+);
+
+fields
+(
+    jRe
+    jIm
+    BRe
+    BIm
+    F
+    VRe
+    VIm
+    VReGrad
+    VImGrad
+    sigma
+    mur
+);
+
+// ************************************************************************* //

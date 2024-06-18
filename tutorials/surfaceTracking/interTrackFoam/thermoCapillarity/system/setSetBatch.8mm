@@ -1,0 +1,11 @@
+
+faceSet left   new boxToFace (-0.00801 -0.00801 -1) (-0.00799 0.00801 1)
+faceSet right  new boxToFace ( 0.00799 -0.00801 -1) ( 0.00801 0.00801 1)
+
+faceSet top    new boxToFace (-0.00801  0.00799 -1) ( 0.00801  0.00801 1)
+faceSet bottom new boxToFace (-0.00801 -0.00801 -1) ( 0.00801 -0.00799 1)
+
+faceSet front  new boxToFace (-1 -1  1e-10) (1 1  1.0000)
+faceSet back   new boxToFace (-1 -1 -1) (1 1 -1e-10)
+
+quit

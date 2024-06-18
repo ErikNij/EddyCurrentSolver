@@ -1,0 +1,80 @@
+### Geometric cell sets
+
+cellSet cellSet_geometry_fluidDynamic             new boxToCell (-0.03500 -1.00000  0.00000) ( 0.03500  1.00000  0.02000)
+cellSet cellSet_geometry_fluid                    new setToCell cellSet_geometry_fluidDynamic
+
+cellSet cellSet_geometry_fluidStatic              new boxToCell (-0.03500 -1.00000 -0.00040) ( 0.04500  1.00000  0.00000)
+cellSet cellSet_geometry_fluid                    add setToCell cellSet_geometry_fluidStatic
+
+cellSet cellSet_geometry_castingFrameDynamicLeft  new boxToCell (-0.04500 -1.00000  0.00000) (-0.03500  1.00000  0.05000)
+cellSet cellSet_geometry_castingFrameDynamicRight new boxToCell ( 0.03500 -1.00000  0.00000) ( 0.04500  1.00000  0.05000)
+cellSet cellSet_geometry_castingFrameDynamic      new setToCell cellSet_geometry_castingFrameDynamicLeft
+cellSet cellSet_geometry_castingFrameDynamic      add setToCell cellSet_geometry_castingFrameDynamicRight
+cellSet cellSet_geometry_castingFrame             new setToCell cellSet_geometry_castingFrameDynamic
+
+cellSet cellSet_geometry_castingFrameStaticLeft   new boxToCell (-0.04500 -1.00000  0.05000) (-0.03500  1.00000  0.09000)
+cellSet cellSet_geometry_castingFrameStaticRight  new boxToCell ( 0.03500 -1.00000  0.05000) ( 0.04500  1.00000  0.09000)
+cellSet cellSet_geometry_castingFrameStatic       new setToCell cellSet_geometry_castingFrameStaticLeft
+cellSet cellSet_geometry_castingFrameStatic       add setToCell cellSet_geometry_castingFrameStaticRight
+cellSet cellSet_geometry_castingFrame             add setToCell cellSet_geometry_castingFrameStatic
+
+cellSet cellSet_geometry_substrate                new boxToCell (-0.07800 -1.00000 -0.00490) ( 0.07800  1.00000 -0.00090)
+
+cellSet cellSet_geometry_wafer                    new boxToCell (-0.03500 -1.00000 -0.00090) ( 0.07800  1.00000 -0.00040)
+
+cellSet cellSet_geometry_freeSpaceDynamic         new boxToCell (-0.03500 -1.00000  0.00000) ( 0.03500  1.00000  0.05000)
+cellSet cellSet_geometry_freeSpaceDynamic         delete setToCell cellSet_geometry_fluidDynamic
+cellSet cellSet_geometry_freeSpaceStatic          new setToCell cellSet_geometry_fluidDynamic
+cellSet cellSet_geometry_freeSpaceStatic          add setToCell cellSet_geometry_castingFrameDynamic
+cellSet cellSet_geometry_freeSpaceStatic          add setToCell cellSet_geometry_freeSpaceDynamic
+cellSet cellSet_geometry_freeSpaceStatic          invert
+cellSet cellSet_geometry_freeSpace                new setToCell cellSet_geometry_freeSpaceDynamic
+cellSet cellSet_geometry_freeSpace                add setToCell cellSet_geometry_freeSpaceStatic
+
+### Material cell sets
+
+cellSet cellSet_material_liquidSilicon            new setToCell cellSet_geometry_fluid
+
+cellSet cellSet_material_graphite                 new setToCell cellSet_geometry_castingFrame
+cellSet cellSet_material_graphite                 add setToCell cellSet_geometry_substrate
+
+cellSet cellSet_material_solidSilicon             new setToCell cellSet_geometry_wafer
+
+cellSet cellSet_material_air                      new setToCell cellSet_geometry_freeSpace
+
+### Region cell sets
+
+cellSet cellSet_region_fluid                      new setToCell cellSet_geometry_fluidDynamic
+
+cellSet cellSet_region_dynamic                    new setToCell cellSet_geometry_castingFrameDynamic
+cellSet cellSet_region_dynamic                    add setToCell cellSet_geometry_freeSpaceDynamic
+
+cellSet cellSet_region_static                     new setToCell cellSet_geometry_castingFrameStatic
+cellSet cellSet_region_static                     add setToCell cellSet_geometry_freeSpaceStatic
+
+### Outer face sets
+
+faceSet faceSet_front                             new boxToFace (-0.15000 -0.00063 -0.06000) ( 0.15000 -0.00062  0.14000)
+faceSet faceSet_back                              new boxToFace (-0.15000  0.00062 -0.06000) ( 0.15000  0.00063  0.14000)
+faceSet faceSet_frontAndBack                      new setToFace faceSet_front
+faceSet faceSet_frontAndBack                      add setToFace faceSet_back
+
+faceSet faceSet_infinity                          new boxToFace (-0.15001 -1.00000 -0.06000) (-0.14999  1.00000  0.14000)
+faceSet faceSet_infinity                          add boxToFace ( 0.14999 -1.00000 -0.05999) ( 0.15001  1.00000  0.14000)
+faceSet faceSet_infinity                          add boxToFace (-0.15000 -1.00000  0.13999) ( 0.15000  1.00000  0.14001)
+faceSet faceSet_infinity                          add boxToFace (-0.15000 -1.00000 -0.06001) ( 0.15000  1.00000 -0.05999)
+
+### Inner face sets
+
+faceSet faceSet_fixedMesh                         new boxToFace (-0.04499 -1.00000 -0.00001) (-0.03501  1.00000  0.00001)
+faceSet faceSet_fixedMesh                         add boxToFace (-0.04501 -1.00000  0.00001) (-0.04499  1.00000  0.04999)
+faceSet faceSet_fixedMesh                         add boxToFace (-0.04499 -1.00000  0.04999) ( 0.04499  1.00000  0.05001)
+faceSet faceSet_fixedMesh                         add boxToFace ( 0.04499 -1.00000  0.00001) ( 0.04501  1.00000  0.04999)
+faceSet faceSet_fixedMesh                         add boxToFace ( 0.03501 -1.00000 -0.00001) ( 0.04499  1.00000  0.00001)
+
+faceSet faceSet_trackedSurface                    new boxToFace (-0.03500 -1.00000  0.01999) ( 0.03500  1.00000  0.02001)
+
+faceSet faceSet_movingWall                        new boxToFace (-0.03500 -1.00000 -0.00001) ( 0.03500  1.00000  0.00001)
+
+faceSet faceSet_fixedWall                         new boxToFace (-0.03501 -1.00000  0.00000) (-0.03499  1.00000  0.02000)
+faceSet faceSet_fixedWall                         add boxToFace ( 0.03499 -1.00000  0.00000) ( 0.03501  1.00000  0.02000)

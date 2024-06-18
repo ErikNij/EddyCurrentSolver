@@ -1,0 +1,43 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      dynamicMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dynamicFvMesh dynamicMotionSolverFvMesh;
+
+twoDMotion yes;
+
+// tetFemMotionSolver laplace (axis points drift along axis towards its center)
+solver laplace;
+diffusivity uniform;
+// distancePatches 1 ( trackedSurface );
+
+// tetFemMotionSolver pseudoSolid (axis drift)
+// solver pseudoSolid;
+// pseudoSolid
+// {
+//     poissonsRatio           0.3;
+//     nCorrectors             3;
+//     convergenceTolerance    1e-9;
+// };
+// diffusivity quadratic;
+// distancePatches 1 ( trackedSurface );
+
+// // fvMotionSolver (looks good)
+// solver velocityLaplacian;
+// diffusivity quadratic inverseDistance 1 ( trackedSurface );
+
+frozenDiffusion no;
+
+// ************************************************************************* //

@@ -1,0 +1,178 @@
+### Geometry
+
+# All
+
+cellSet  cellSet_geometry_all             new    boxToCell      (-1 -1 -1) ( 1  1  1)
+
+# Fluid
+
+pointSet pointSet_geometry_fluid_dynamic  new    surfaceToPoint "constant/triSurface/geometry_fluid_dynamic.stl" 2e-4 true false
+pointSet pointSet_geometry_fluid_static   new    surfaceToPoint "constant/triSurface/geometry_fluid_static.stl" 2e-4 true false
+
+cellSet  cellSet_geometry_fluid_dynamic   new    pointToCell    pointSet_geometry_fluid_dynamic all
+cellSet  cellSet_geometry_fluid_static    new    pointToCell    pointSet_geometry_fluid_static all
+
+cellSet  cellSet_geometry_fluid           new    setToCell      cellSet_geometry_fluid_dynamic
+cellSet  cellSet_geometry_fluid           add    setToCell      cellSet_geometry_fluid_static
+cellSet  cellSet_geometry_fluid_old       remove
+
+pointSet pointSet_geometry_fluid_dynamic  remove
+pointSet pointSet_geometry_fluid_static   remove
+
+# Wafer
+
+pointSet pointSet_geometry_wafer          new    surfaceToPoint "constant/triSurface/geometry_wafer.stl" 2e-4 true false
+
+cellSet  cellSet_geometry_wafer           new    pointToCell    pointSet_geometry_wafer all
+
+pointSet pointSet_geometry_wafer          remove
+
+# Substrate
+
+pointSet pointSet_geometry_substrate      new    surfaceToPoint "constant/triSurface/geometry_substrate.stl" 2e-4 true false
+
+cellSet  cellSet_geometry_substrate       new    pointToCell    pointSet_geometry_substrate all
+
+pointSet pointSet_geometry_substrate      remove
+
+# Frame
+
+pointSet pointSet_geometry_frame_dynamic  new    surfaceToPoint "constant/triSurface/geometry_frame_dynamic.stl" 2e-4 true false
+pointSet pointSet_geometry_frame_static   new    surfaceToPoint "constant/triSurface/geometry_frame_static.stl" 2e-4 true false
+
+cellSet  cellSet_geometry_frame_dynamic   new    pointToCell    pointSet_geometry_frame_dynamic all
+cellSet  cellSet_geometry_frame_static    new    pointToCell    pointSet_geometry_frame_static all
+
+cellSet  cellSet_geometry_frame           new    setToCell      cellSet_geometry_frame_dynamic
+cellSet  cellSet_geometry_frame           add    setToCell      cellSet_geometry_frame_static
+cellSet  cellSet_geometry_frame_old       remove
+
+pointSet pointSet_geometry_frame_dynamic  remove
+pointSet pointSet_geometry_frame_static   remove
+
+# Free
+
+pointSet pointSet_geometry_free_dynamic   new    surfaceToPoint "constant/triSurface/geometry_free_dynamic.stl" 2e-4 true false
+pointSet pointSet_geometry_free_static    new    surfaceToPoint "constant/triSurface/geometry_free_static.stl" 2e-4 true false
+
+cellSet  cellSet_geometry_free_dynamic    new    pointToCell    pointSet_geometry_free_dynamic all
+cellSet  cellSet_geometry_free_static     new    pointToCell    pointSet_geometry_free_static all
+
+cellSet  cellSet_geometry_free            new    setToCell      cellSet_geometry_free_dynamic
+cellSet  cellSet_geometry_free            add    setToCell      cellSet_geometry_free_static
+cellSet  cellSet_geometry_free_old        remove
+
+pointSet pointSet_geometry_free_dynamic   remove
+pointSet pointSet_geometry_free_static    remove
+
+# Coil
+
+pointSet pointSet_geometry_coil0          new    surfaceToPoint "constant/triSurface/geometry_coil0.stl" 2e-4 true false
+pointSet pointSet_geometry_coil1          new    surfaceToPoint "constant/triSurface/geometry_coil1.stl" 2e-4 true false
+pointSet pointSet_geometry_coil2          new    surfaceToPoint "constant/triSurface/geometry_coil2.stl" 2e-4 true false
+
+cellSet  cellSet_geometry_coil0           new    pointToCell    pointSet_geometry_coil0 all
+cellSet  cellSet_geometry_coil1           new    pointToCell    pointSet_geometry_coil1 all
+cellSet  cellSet_geometry_coil2           new    pointToCell    pointSet_geometry_coil2 all
+
+cellSet  cellSet_geometry_coil            new    setToCell      cellSet_geometry_coil0
+cellSet  cellSet_geometry_coil            add    setToCell      cellSet_geometry_coil1
+cellSet  cellSet_geometry_coil            add    setToCell      cellSet_geometry_coil2
+cellSet  cellSet_geometry_coil_old        remove
+
+pointSet pointSet_geometry_coil0          remove
+pointSet pointSet_geometry_coil1          remove
+pointSet pointSet_geometry_coil2          remove
+
+# Background
+
+cellSet  cellSet_geometry_background      new    setToCell      cellSet_geometry_all
+cellSet  cellSet_geometry_background      delete setToCell      cellSet_geometry_fluid
+cellSet  cellSet_geometry_background      delete setToCell      cellSet_geometry_wafer
+cellSet  cellSet_geometry_background      delete setToCell      cellSet_geometry_substrate
+cellSet  cellSet_geometry_background      delete setToCell      cellSet_geometry_frame
+cellSet  cellSet_geometry_background      delete setToCell      cellSet_geometry_coil
+cellSet  cellSet_geometry_background_old  remove
+
+
+
+### Outer/Inner boundaries
+
+pointSet pointSet_geometry_trackedSurface new    surfaceToPoint "constant/triSurface/geometry_boundary_trackedSurface.stl" 2e-4 false false
+pointSet pointSet_geometry_fixedWall      new    surfaceToPoint "constant/triSurface/geometry_boundary_fixedWall.stl" 2e-4 false false
+pointSet pointSet_geometry_movingWall     new    surfaceToPoint "constant/triSurface/geometry_boundary_movingWall.stl" 2e-4 false false
+pointSet pointSet_geometry_fixedMesh      new    surfaceToPoint "constant/triSurface/geometry_boundary_fixedMesh.stl" 2e-4 false false
+
+pointSet pointSet_geometry_terminal0      new    surfaceToPoint "constant/triSurface/geometry_boundary_terminal0.stl" 2e-4 false false
+pointSet pointSet_geometry_terminal1      new    surfaceToPoint "constant/triSurface/geometry_boundary_terminal1.stl" 2e-4 false false
+pointSet pointSet_geometry_terminal2      new    surfaceToPoint "constant/triSurface/geometry_boundary_terminal2.stl" 2e-4 false false
+
+faceSet  faceSet_geometry_trackedSurface  new    pointToFace    pointSet_geometry_trackedSurface all
+faceSet  faceSet_geometry_fixedWall       new    pointToFace    pointSet_geometry_fixedWall all
+faceSet  faceSet_geometry_movingWall      new    pointToFace    pointSet_geometry_movingWall all
+faceSet  faceSet_geometry_fixedMesh       new    pointToFace    pointSet_geometry_fixedMesh all
+
+faceSet  faceSet_geometry_terminal0       new    pointToFace    pointSet_geometry_terminal0 all
+faceSet  faceSet_geometry_terminal1       new    pointToFace    pointSet_geometry_terminal1 all
+faceSet  faceSet_geometry_terminal2       new    pointToFace    pointSet_geometry_terminal2 all
+
+faceSet  faceSet_geometry_terminal        new    setToFace      faceSet_geometry_terminal0
+faceSet  faceSet_geometry_terminal        add    setToFace      faceSet_geometry_terminal1
+faceSet  faceSet_geometry_terminal        add    setToFace      faceSet_geometry_terminal2
+faceSet  faceSet_geometry_terminal_old    remove
+
+faceSet  faceSet_geometry_infinity        new    boundaryToFace
+
+pointSet pointSet_geometry_trackedSurface remove
+pointSet pointSet_geometry_fixedWall      remove
+pointSet pointSet_geometry_movingWall     remove
+pointSet pointSet_geometry_fixedMesh      remove
+
+pointSet pointSet_geometry_terminal0      remove
+pointSet pointSet_geometry_terminal1      remove
+pointSet pointSet_geometry_terminal2      remove
+
+
+
+### Materials
+
+cellSet cellSet_material_silicon_liquid   new    setToCell      cellSet_geometry_fluid
+
+cellSet cellSet_material_silicon_solid    new    setToCell      cellSet_geometry_wafer
+
+cellSet cellSet_material_graphite         new    setToCell      cellSet_geometry_frame
+cellSet cellSet_material_graphite         add    setToCell      cellSet_geometry_substrate
+cellSet cellSet_material_graphite_old     remove
+
+cellSet cellSet_material_air              new    setToCell      cellSet_geometry_background
+cellSet cellSet_material_air              add    setToCell      cellSet_geometry_coil
+cellSet cellSet_material_air_old          remove
+
+
+
+### Regions
+
+cellSet cellSet_region_fluid              new    setToCell      cellSet_geometry_fluid_dynamic
+
+cellSet cellSet_region_dynamic            new    setToCell      cellSet_geometry_frame_dynamic
+cellSet cellSet_region_dynamic            add    setToCell      cellSet_geometry_free_dynamic
+cellSet cellSet_region_dynamic_old        remove
+
+cellSet cellSet_region_static             new    setToCell      cellSet_geometry_all
+cellSet cellSet_region_static             delete setToCell      cellSet_region_fluid
+cellSet cellSet_region_static             delete setToCell      cellSet_region_dynamic
+cellSet cellSet_region_static_old         remove
+
+cellSet cellSet_region_conductor          new    setToCell      cellSet_geometry_fluid
+cellSet cellSet_region_conductor          add    setToCell      cellSet_geometry_wafer
+cellSet cellSet_region_conductor          add    setToCell      cellSet_geometry_frame
+cellSet cellSet_region_conductor          add    setToCell      cellSet_geometry_substrate
+cellSet cellSet_region_conductor_old      remove
+
+cellSet cellSet_region_space              new    setToCell      cellSet_geometry_all
+cellSet cellSet_region_space              delete setToCell      cellSet_region_conductor
+cellSet cellSet_region_space_old          remove
+
+### End
+
+quit

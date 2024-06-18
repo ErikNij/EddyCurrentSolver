@@ -1,0 +1,12 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # run from this directory
+set -x
+
+wmake all basic || exit 1
+wmake all electromagnetics || exit 1
+wmake all heatTransfer || exit 1
+wmake all incompressible || exit 1
+wmake all multiphase || exit 1
+wmake all surfaceTracking || exit 1
+
+wmake all multiPhysics || exit 1

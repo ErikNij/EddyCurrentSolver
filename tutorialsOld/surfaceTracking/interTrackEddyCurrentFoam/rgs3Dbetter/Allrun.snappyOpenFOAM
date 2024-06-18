@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# NOTE: To be used only with OpenFOAM 2.2.0 +
+
+# Remove old polyMesh
+rm -rf constant/polyMesh
+
+# Get blockMeshDict.py script from storage folder
+mkdir 'constant/polyMesh'
+cp -r 'constant/polyMesh.org/blockMeshDict.py' 'constant/polyMesh/'
+
+# Create blockMeshDict
+./constant/polyMesh/blockMeshDict.py
+
+# Run blockMesh
+blockMesh
+rm -f 'constant/polyMesh/cellZones'
+rm -f 'constant/polyMesh/faceZones'
+rm -f 'constant/polyMesh/pointZones'
+
+# Mirror mesh
+cp 'system/mirrorMeshDict.x' 'system/mirrorMeshDict'
+mirrorMesh
+cp 'system/mirrorMeshDict.y' 'system/mirrorMeshDict'
+mirrorMesh
+
+# Extract surface features
+surfaceFeatureExtract
+
+# Run snappyHexMesh (needs OpenFOAM 2.2.0 + for featureSnapping)
+cp 'system/snappyHexMeshDict.stage1' 'system/snappyHexMeshDict'
+snappyHexMesh -overwrite
+cp 'system/snappyHexMeshDict.stage2' 'system/snappyHexMeshDict'
+snappyHexMesh -overwrite
+cp 'system/snappyHexMeshDict.stage3' 'system/snappyHexMeshDict'
+snappyHexMesh -overwrite
+cp 'system/snappyHexMeshDict.stage4' 'system/snappyHexMeshDict'
+snappyHexMesh -overwrite
+
+# Remove leftovers from snappyHexMesh
+rm -rf 'constant/cellLevel' \
+        'constant/polyMesh/cellLevel'* \
+        'constant/pointLevel' \
+        'constant/polyMesh/pointLevel'* \
+        'constant/polyMesh/refinementHistory'* \
+        'constant/polyMesh/surfaceIndex'* \
+        'constant/polyMesh/level0Edge' \
+        > /dev/null 2>&1
+
+# Remove empty patches
+createPatch -overwrite
+
+# Copy new polyMesh files to storage folder
+cp 'constant/polyMesh/blockMeshDict' \
+   'constant/polyMesh/boundary' \
+   'constant/polyMesh/faces' \
+   'constant/polyMesh/neighbour' \
+   'constant/polyMesh/owner' \
+   'constant/polyMesh/points' \
+   'constant/polyMesh.org/'

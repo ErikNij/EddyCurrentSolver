@@ -1,0 +1,131 @@
+#!/bin/bash
+# August 2015
+# Pascal Beckstein (p.beckstein@hzdr.de)
+
+# TODO [High] Sort this mess in cleanFunctions.sh and put it in case/.
+# TODO [High] Sort this mess in helpFunctions.sh and put it in case/.
+
+# --------------------------------------------------------------------------- #
+# --- Sourcing -------------------------------------------------------------- #
+# --------------------------------------------------------------------------- #
+
+PSD="$(dirname "${BASH_SOURCE[0]}")";
+sourcePSD () { local psd="$PSD"; source "$1"; PSD="$psd"; }
+
+# --------------------------------------------------------------------------- #
+
+sourcePSD "$PSD/bashrc.d/source.sh"
+
+# --------------------------------------------------------------------------- #
+# --- Function definitions -------------------------------------------------- #
+# --------------------------------------------------------------------------- #
+
+feClear ()
+{
+    # Backup keys
+    local fe41_foam_inst_dir="$FE41_FOAM_INST_DIR"
+    local fe41_foam_etc="$FE41_FOAM_ETC"
+    local fe41_foam_user_etc="$FE41_FOAM_USER_ETC"
+
+    # Clear environment
+    env_unsetRegex WM_.*
+    env_unsetRegex FOAM_.*
+    env_removeAll 'foam'
+    env_removeAll 'foam-extend'
+    env_unsetRegex PARAVIEW_.*
+
+    # TODO: Remove paraview from pythonpath
+    env_removeAny 'PYTHONPATH' 'ParaView'
+    env_removeAny 'PYTHONPATH' 'paraview'
+
+    # TODO: Remove freecad from pythonpath
+    env_removeAny 'PYTHONPATH' 'freecad'
+
+    # Clear alias
+    unalias pf &> /dev/null
+
+    # Restore keys
+    env_set 'FE41_FOAM_INST_DIR' "$fe41_foam_inst_dir"
+    env_set 'FE41_FOAM_ETC' "$fe41_foam_etc"
+    env_set 'FE41_FOAM_USER_ETC' "$fe41_foam_user_etc"
+}
+
+
+feLoad ()
+{
+    # Load project environment
+    source "$FOAM_ETC/bashrc" &> /dev/null
+
+    # Load user environment
+    source "$FOAM_USER_ETC/user/source.sh"
+
+    # Set alias
+    alias pf='paraFoam -nativeReader &> /dev/null &'
+}
+
+
+fe41 ()
+{
+    if [ -e "$FE41_FOAM_ETC" ] && [ -d "$FE41_FOAM_ETC" ]; then
+
+        # Clear old environment
+        echo "Clear old environment"
+        feClear
+
+        # Restore basic environment variables
+        [ ! -z "$FE41_FOAM_INST_DIR" ] && \
+            env_set 'FOAM_INST_DIR' "$FE41_FOAM_INST_DIR"
+        env_set 'FOAM_ETC' "$FE41_FOAM_ETC"
+        env_set 'FOAM_USER_ETC' "$FE41_FOAM_USER_ETC"
+
+        # Compile option (defaults to 'Opt')
+        env_set 'WM_COMPILE_OPTION' "${1:-'Opt'}"
+
+        # Load new environment
+        echo "Load new environment"
+        feLoad
+
+        # Add bin directory to PATH
+        echo "Add bin directory to PATH"
+        env_prepend 'PATH' "$WM_PROJECT_USER_DIR/bin"
+
+        # TODO: Add python tools to PYTHONPATH
+        echo "Add python tools to PYTHONPATH"
+        env_prepend 'PYTHONPATH' "$WM_PROJECT_USER_DIR/tools/python"
+
+        # TODO: Add paraview library to PYTHONPATH
+        echo "Add paraview library to PYTHONPATH"
+        env_prepend 'PYTHONPATH' "$(echo $PARAVIEW_INCLUDE_DIR | sed 's/include/lib/')/site-packages"
+        env_prepend 'PYTHONPATH' "$(echo $PARAVIEW_INCLUDE_DIR | sed 's/include/lib/')"
+
+        # TODO: Add freecad library to PYTHONPATH
+        echo "Add freecad library to PYTHONPATH"
+        freecadBin="$(which freecad)"
+        [ ! -z "$freecadBin" ] && \
+            env_prepend 'PYTHONPATH' "${freecadBin%'/bin/freecad'}/lib/freecad/lib"
+
+        case "$HOSTNAME" in
+
+            hydra*|cn*|intel*|fluid*)
+                env_remove 'LD_LIBRARY_PATH' '/usr/lib'
+            ;;
+
+        esac
+
+    else
+
+        local msg
+            msg="Could not find 'bashrc' of foam-extend in folder"
+            msg="$msg '$FOAM_ETC'. Did you either pass the path to the"
+            msg="$msg foam-extend etc-directory as parameter \$1 to"
+            msg="$msg this 'bashrc' or set FOAM_ETC directly instead?"
+            msg="$msg Is foam-extend really installed, correctly?"
+
+        error_fatal "$msg" 'fe41'
+
+    fi
+}
+
+# --------------------------------------------------------------------------- #
+# --------------------------------------------------------------------------- #
+# --------------------------------------------------------------------------- #

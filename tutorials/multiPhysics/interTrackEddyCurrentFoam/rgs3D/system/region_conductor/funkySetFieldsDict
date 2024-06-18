@@ -1,0 +1,61 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      funkySetFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+materialProperties
+(
+    "sigma_silicon_liquid=1.2e+6;"    // Conductivity of liquid silicon in [S/m]
+    "sigma_silicon_solid=8.3e+4;"     // Conductivity of solid silicon in [S/m]
+    "sigma_graphite=1.25e+5;"         // Conductivity of graphite in [S/m]
+);
+
+expressions
+(
+    sigma_reset
+    {
+        field         sigma;
+        expression    "0";
+        keepPatches   true;
+    }
+
+    sigma_silicon_liquid
+    {
+        field         sigma;
+        variables     $materialProperties;
+        condition     "set(cellSet_material_silicon_liquid)";
+        expression    "sigma_silicon_liquid";
+        keepPatches   true;
+    }
+
+    sigma_silicon_solid
+    {
+        field         sigma;
+        variables     $materialProperties;
+        condition     "set(cellSet_material_silicon_solid)";
+        expression    "sigma_silicon_solid";
+        keepPatches   true;
+    }
+
+    sigma_graphite
+    {
+        field         sigma;
+        variables     $materialProperties;
+        condition     "set(cellSet_material_graphite)";
+        expression    "sigma_graphite";
+        keepPatches   true;
+    }
+);
+
+// ************************************************************************* //

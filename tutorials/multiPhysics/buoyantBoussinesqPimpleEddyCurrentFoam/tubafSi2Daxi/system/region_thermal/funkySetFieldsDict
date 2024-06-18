@@ -1,0 +1,110 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      funkySetFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+materialProperties
+(
+    // Data from Vladi
+    "rhoCp_siliconLiquid=2432236;" // = 2580*943 (rho * cp)
+    "rhoCp_siliconSolid=1905940;"     // = 2330*818 (rho * cp)
+    "lambda_siliconLiquid=66.5;"    // 2580*943*3.333e-7/0.0122 (rho * cp * nu / pr)
+    "lambda_siliconSolid=22.0;"      // 2330*818*1.1543e-05 (rho * cp * kappa)
+);
+
+expressions
+(
+    lambda_reset
+    {
+        field         lambda;
+        expression    "0";
+        keepPatches   true;
+    }
+
+//     lambda_siliconLiquid
+//     {
+//         field         lambda;
+//         variables     $materialProperties;
+//         expression    "lambda_siliconLiquid";
+//         condition     "set(cellSet_material_siliconLiquid)";
+//         keepPatches   true;
+//     }
+
+    lambda_siliconSolid
+    {
+        field         lambda;
+        variables     $materialProperties;
+        expression    "lambda_siliconSolid";
+        condition     "set(cellSet_material_siliconSolid)";
+        keepPatches   true;
+    }
+
+    rhoCp_reset
+    {
+        field         rhoCp;
+        expression    "0";
+        keepPatches   true;
+    }
+
+//     rhoCp_siliconLiquid
+//     {
+//         field         rhoCp;
+//         variables     $materialProperties;
+//         expression    "rhoCp_siliconLiquid";
+//         condition     "set(cellSet_material_siliconLiquid)";
+//         keepPatches   true;
+//     }
+
+    rhoCp_siliconSolid
+    {
+        field         rhoCp;
+        variables     $materialProperties;
+        expression    "rhoCp_siliconSolid";
+        condition     "set(cellSet_material_siliconSolid)";
+        keepPatches   true;
+    }
+
+//     temperature_gradient
+//     {
+//         field         T;
+//         expression    "50.0*(pos().z-0.022)";
+//         keepPatches   true;
+//     }
+
+    temperature_gradient_liquid
+    {
+        field         T;
+        condition     "pos().z>=0.022";
+        expression    "5.0*pow(pos().x/0.053,2)*pow((pos().z-0.022)/(0.070-0.022),3) + 5";
+        keepPatches   true;
+    }
+
+    temperature_gradient_liquid_2
+    {
+        field         T;
+        condition     "pos().z<=0.030";
+        expression    "5.0*(pos().z-0.022)/(0.030-0.022)";
+        keepPatches   true;
+    }
+
+    temperature_gradient_solid
+    {
+        field         T;
+        condition     "pos().z<=0.022";
+        expression    "10.0*((pos().z-0.022)/0.022)";
+        keepPatches   true;
+    }
+);
+
+// ************************************************************************* //

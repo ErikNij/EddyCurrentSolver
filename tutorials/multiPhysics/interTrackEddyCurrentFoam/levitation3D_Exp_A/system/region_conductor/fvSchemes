@@ -1,0 +1,89 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default                           none;
+}
+
+gradSchemes
+{
+    default                           none;
+
+    grad(sigma)                       Gauss linear;
+
+    curl(A0Re)                        Gauss skewCorrected linear;
+    curl(A0Im)                        Gauss skewCorrected linear;
+
+    grad(A0Re)                        Gauss skewCorrected linear;
+    grad(A0Im)                        Gauss skewCorrected linear;
+
+    grad(AMRe)                        Gauss skewCorrected linear;
+    grad(AMIm)                        Gauss skewCorrected linear;
+
+    grad(VRe)                         Gauss skewCorrected linear;
+    grad(VIm)                         Gauss skewCorrected linear;
+}
+
+divSchemes
+{
+    default                           none;
+}
+
+laplacianSchemes
+{
+    default                           none;
+
+    laplacian(A0Re)                   Gauss linear corrected;
+    laplacian(A0Im)                   Gauss linear corrected;
+
+    laplacian(chiNurf,AMRe)           Gauss linear corrected;
+    laplacian(chiNurf,AMIm)           Gauss linear corrected;
+
+    laplacian(sigmaf,VRe)             Gauss linear corrected;
+    laplacian(sigmaf,VIm)             Gauss linear corrected;
+
+}
+
+interpolationSchemes
+{
+    default                           none;
+
+    interpolate(chiNur)               harmonic;
+
+    interpolate(sigma)                harmonic;
+
+    interpolate(grad(A0Re))           skewCorrected linear;
+    interpolate(grad(A0Im))           skewCorrected linear;
+
+    interpolate(grad(AMRe))           skewCorrected linear;
+    interpolate(grad(AMIm))           skewCorrected linear;
+
+    interpolate(grad(VRe))            skewCorrected linear;
+    interpolate(grad(VIm))            skewCorrected linear;
+
+    interpolate(A0Re)                 skewCorrected linear;
+    interpolate(A0Im)                 skewCorrected linear;
+
+    interpolate(ARe)                  skewCorrected linear;
+    interpolate(AIm)                  skewCorrected linear;
+
+// TEST/TODO: Better map phiGradAn from default region instead of re-calculation?
+    interpolate(grad(ARe))            skewCorrected linear;
+    interpolate(grad(AIm))            skewCorrected linear;
+}
+
+// ************************************************************************* //

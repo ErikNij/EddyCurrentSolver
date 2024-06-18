@@ -1,0 +1,427 @@
+#!/bin/bash
+
+flagClean=0; flagPrepare=0; flagParallel=0; flagParallel2=0; flagReset=0; flagRun=0
+
+flagRenumberMesh=0
+
+while [[ $# -gt 0 ]]; do
+    if   [[ $1 == 'clean' ]];   then flagClean=1
+    elif [[ $1 == 'prepare' ]]; then flagPrepare=1
+    elif [[ $1 == 'parallel' ]]; then
+        flagParallel=1
+        flagParallel2=0
+    elif [[ $1 == 'parallel2' ]]; then
+        flagParallel2=1
+        flagParallel=0
+    elif [[ $1 == 'reset' ]];   then flagReset=1
+    elif [[ $1 == 'start' ]];   then
+        flagPrepare=1
+        flagRun=1
+    else
+      echo "Unsupported flag: '$1'"
+    fi
+    shift
+done
+
+# Helper functions
+. $WM_PROJECT_USER_DIR/etc/helpFunctions.sh
+. $WM_PROJECT_USER_DIR/etc/cleanFunctions.sh
+
+setErrorTrap
+
+regionlist="region_fluid region_dynamic region_static"
+
+if [[ $flagClean -eq 1 ]]; then
+
+    # Cleanup
+    cleanCase
+    for region in $regionlist; do
+        cleanCase "$region"
+    done
+
+    # Wipe folders with org backup
+    wipeOrgCopy
+    for region in $regionlist; do
+        wipeOrgCopy "$region"
+    done
+
+    # Wipe polymesh for regions
+    wipePolyMesh
+    for region in $regionlist; do
+        wipePolyMesh "$region"
+    done
+
+    # Clean tools
+    cleanTools
+
+fi
+
+if [[ $flagPrepare -eq 1 && $flagClean -eq 1 ]] || \
+   [[ $flagPrepare -eq 1 && ! -e '0' ]] || \
+   [[ $flagPrepare -eq 1 && ! -e '0/region_fluid' ]] || \
+   [[ $flagPrepare -eq 1 && ! -e '0/region_dynamic' ]] || \
+   [[ $flagPrepare -eq 1 && ! -e '0/region_static' ]] || \
+   [[ $flagPrepare -eq 1 && ! -e 'constant/polyMesh' ]] || \
+   [[ $flagPrepare -eq 1 && ! -e 'constant/region_fluid/polyMesh' ]] || \
+   [[ $flagPrepare -eq 1 && ! -e 'constant/region_dynamic/polyMesh' ]] || \
+   [[ $flagPrepare -eq 1 && ! -e 'constant/region_static/polyMesh' ]] || \
+   [[ $flagPrepare -eq 1 && ! -e 'constant/region_fluid/faMesh' ]]; then
+
+    # Write blockMeshDict
+    ./constant/polyMesh.org/blockMeshDict.py
+
+    # Restore polymesh from org backup
+    restorePolyMeshOrg
+
+    # Create coarse background mesh
+    runApplication blockMesh || exit 1
+    polyMeshBoundaryFormatAscii
+
+#     # Refine mesh
+#     runApplication snappyHexMesh -overwrite || exit 1
+#
+#     # Remove leftovers from snappyHexMesh
+#     rm -rf 'constant/cellLevel' \
+#            'constant/polyMesh/cellLevel'* \
+#            'constant/pointLevel' \
+#            'constant/polyMesh/pointLevel'* \
+#            'constant/polyMesh/refinementHistory'* \
+#            'constant/polyMesh/surfaceIndex'* \
+#            > /dev/null 2>&1
+#
+#     # Create 2D mesh
+#     runApplication extrudeMesh || exit 1
+
+    # Remove all zones
+    rm 'constant/polyMesh/cellZones' > /dev/null 2>&1
+    rm 'constant/polyMesh/faceZones' > /dev/null 2>&1
+    rm 'constant/polyMesh/pointZones' > /dev/null 2>&1
+
+    if [[ $flagParallel2 -eq 1 ]]; then
+
+        # Decompose mesh
+        runApplication \
+            decomposePar || exit 1
+
+        # Store number of processors
+        np=$(ls -1d 'processor'* | wc -l)
+
+        # Create new topoSets
+        runParallel $np \
+            setSet -noVTK -batch 'system/setSetBatch' || exit 1
+
+        # Create backup of topoSets
+        for p in $(ls -1d 'processor'*); do
+            rm "$p/constant/polyMesh/sets/"*"_old"
+            mkdir "$p/constant/polyMesh/sets/bak"
+            cp "$p/constant/polyMesh/sets/"* \
+               "$p/constant/polyMesh/sets/bak/" \
+               > /dev/null 2>&1
+        done
+
+        # Remove all topoSets
+        for p in $(ls -1d 'processor'*); do
+            rm "$p/constant/polyMesh/sets/"* > /dev/null 2>&1
+        done
+
+        # Restore faceSets
+        for p in $(ls -1d 'processor'*); do
+            cp "$p/constant/polyMesh/sets/bak/faceSet_"* \
+               "$p/constant/polyMesh/sets/" \
+               > /dev/null 2>&1
+        done
+
+        # Restore pointSets
+        for p in $(ls -1d 'processor'*); do
+            cp "$p/constant/polyMesh/sets/bak/pointSet_"* \
+               "$p/constant/polyMesh/sets/" \
+               > /dev/null 2>&1
+        done
+
+        # Restore cellSets for splitMeshRegions
+        for p in $(ls -1d 'processor'*); do
+            cp "$p/constant/polyMesh/sets/bak/cellSet_region_"* \
+               "$p/constant/polyMesh/sets/" \
+               > /dev/null 2>&1
+        done
+
+        # Create zones for restored topoSets
+        runParallel $np \
+            setsToZones -noFlipMap || exit 1
+
+        # Remove topoSet prefixes from topoZones
+        for p in $(ls -1d 'processor'*); do
+            sed -i 's/cellSet_//g' "$p/constant/polyMesh/cellZones" > /dev/null 2>&1
+            sed -i 's/faceSet_//g' "$p/constant/polyMesh/faceZones" > /dev/null 2>&1
+            sed -i 's/pointSet_//g' "$p/constant/polyMesh/pointZones" > /dev/null 2>&1
+        done
+
+        # Restore all topoSets
+        for p in $(ls -1d 'processor'*); do
+            cp "$p/constant/polyMesh/sets/bak/"* \
+               "$p/constant/polyMesh/sets/" \
+               > /dev/null 2>&1
+        done
+
+        # Create new patches
+        runParallel $np \
+            createPatch -overwrite || exit 1
+
+        # Change dictionaries
+        runParallel $np \
+            changeDictionary || exit 1
+
+        # Split mesh regions
+        runParallel $np \
+            splitMeshRegions -overwrite -cellZonesOnly || exit 1
+
+        # Add fields to 0 from org backup
+        addZeroOrgParallel
+
+        # Move polyMesh from 0 to constant
+        # for regions
+        for region in $regionlist; do
+            moveZeroToConstantPolyMeshParallel "$region"
+        done
+
+        # Recreate topoSets from zones
+        # for regions
+        for region in $regionlist; do
+            runParallel $np \
+                zonesToSets -region "$region" || exit 1
+        done
+
+        # Create new patches and cleanup
+        # for regions
+        for region in $regionlist; do
+            runParallel $np \
+                createPatch -overwrite -region "$region" || exit 1
+
+            for p in $(ls -1d 'processor'*); do
+                rm "$p/0/$region/cellToRegion" > /dev/null 2>&1
+                rm "$p/constant/$region/polyMesh/boundaryRegionAddressing" > /dev/null 2>&1
+            done
+        done
+
+# TODO [Low]: Fix boundaryRegionAddressing for all regions
+# TODO [Low]: Fix cellToRegion for all regions
+
+        # Change dictionaries
+        # for regions
+        for region in $regionlist; do
+            runParallel $np \
+                changeDictionary -region "$region" || exit 1
+        done
+
+        # Add fields to 0 from org backup
+        # for regions
+        for region in $regionlist; do
+            addZeroOrgParallel "$region"
+        done
+
+# TODO [High]: Realize this without funkySetFields?
+
+        runParallel $np \
+            funkySetFields -time '0' || exit 1
+
+        # Init turbulence values for fluid region
+        [[ -e 'constant/region_fluid/turbulenceProperties' ]] && \
+            runParallel $np \
+                initTurbulenceValues -region 'region_fluid' || exit 1
+
+        # Create finite area mesh for fluid region
+        restoreFaMeshOrgParallel 'region_fluid'
+        runParallel $np \
+            makeFaMesh -region 'region_fluid' || exit 1
+
+# TODO [High]: Fix processor boundary creation for faMesh
+
+        # Touch paraFoam files
+        paraviewTouchOpenFOAMParallel
+        for region in $regionlist; do
+            paraviewTouchOpenFOAMParallel "$region"
+        done
+
+    else
+
+        # Create new topoSets
+        runApplication -l 'log.setSet-1' \
+            setSet -noVTK -batch 'system/setSetBatch' || exit 1
+
+        # Create new patches
+        runApplication \
+            createPatch -overwrite || exit 1
+
+        # Create new topoSets
+        rm "constant/polyMesh/sets/"*
+        runApplication -l 'log.setSet-2' \
+            setSet -noVTK -batch 'system/setSetBatch' || exit 1
+
+        # Create backup of topoSets
+        rm "constant/polyMesh/sets/"*"_old"
+        mkdir 'constant/polyMesh/sets/bak'
+        cp 'constant/polyMesh/sets/'* \
+           'constant/polyMesh/sets/bak/' \
+           > /dev/null 2>&1
+
+        # Remove all topoSets
+        rm 'constant/polyMesh/sets/'* > /dev/null 2>&1
+
+        # Restore faceSets
+        cp 'constant/polyMesh/sets/bak/faceSet_'* \
+           'constant/polyMesh/sets/' \
+           > /dev/null 2>&1
+
+        # Restore pointSets
+        cp 'constant/polyMesh/sets/bak/pointSet_'* \
+           'constant/polyMesh/sets/' \
+           > /dev/null 2>&1
+
+        # Restore cellSets for splitMeshRegions
+        cp 'constant/polyMesh/sets/bak/cellSet_region_'* \
+           'constant/polyMesh/sets/' \
+           > /dev/null 2>&1
+
+        # Create zones for restored topoSets
+        runApplication \
+            setsToZones || exit 1
+
+        # Remove topoSet prefixes from topoZones
+        sed -i 's/cellSet_//g' 'constant/polyMesh/cellZones' > /dev/null 2>&1
+        sed -i 's/faceSet_//g' 'constant/polyMesh/faceZones' > /dev/null 2>&1
+        sed -i 's/pointSet_//g' 'constant/polyMesh/pointZones' > /dev/null 2>&1
+
+        # Restore all topoSets
+        cp 'constant/polyMesh/sets/bak/'* \
+           'constant/polyMesh/sets/' \
+           > /dev/null 2>&1
+
+        # Split regions
+        runApplication \
+            splitMeshRegions -overwrite -cellZonesOnly || exit 1
+
+        # Change dictionaries
+        runApplication \
+            changeDictionary || exit 1
+
+        # Add fields to 0 from org backup
+        addZeroOrg
+
+        # Move polyMesh from 0 to constant
+        # for regions
+        for region in $regionlist; do
+            moveZeroToConstantPolyMesh "$region"
+        done
+
+        # Recreate topoSets from zones
+        # for regions
+        for region in $regionlist; do
+            runApplication \
+                zonesToSets -region "$region" || exit 1
+        done
+
+        # Create new patches and cleanup
+        # for regions
+        for region in $regionlist; do
+            runApplication \
+                createPatch -overwrite -region "$region" || exit 1
+
+            rm "0/$region/cellToRegion" > /dev/null 2>&1
+            rm "constant/$region/polyMesh/boundaryRegionAddressing" > /dev/null 2>&1
+        done
+
+# TODO [Low]: Fix boundaryRegionAddressing for all regions
+# TODO [Low]: Fix cellToRegion for all regions
+
+        # Change dictionaries
+        # for regions
+        for region in $regionlist; do
+            runApplication \
+                changeDictionary -region "$region" || exit 1
+        done
+
+        # Add fields to 0 from org backup
+        # for regions
+        for region in $regionlist; do
+            addZeroOrg "$region"
+        done
+
+# TODO [High]: Realize this without funkySetFields?
+
+        runApplication \
+            funkySetFields -time '0' || exit 1
+
+        # Init turbulence values for fluid region
+        [[ -e 'constant/region_fluid/turbulenceProperties' ]] && \
+            runApplication \
+                initTurbulenceValues -region 'region_fluid' || exit 1
+
+        # Create finite area mesh for fluid region
+        restoreFaMeshOrg 'region_fluid'
+        runApplication \
+            makeFaMesh -region 'region_fluid' || exit 1
+
+        # Touch paraFoam files
+        paraviewTouchOpenFOAM
+        for region in $regionlist; do
+            paraviewTouchOpenFOAM "$region"
+        done
+
+    fi
+
+    if [[ $flagParallel -eq 1 ]]; then
+
+        # Decompose mesh
+        runApplication \
+            decomposePar || exit 1
+
+        # Decompose mesh
+        # for regions
+        for region in $regionlist; do
+            runApplication \
+                decomposePar -region $region || exit 1
+        done
+
+        # Touch paraFoam files
+        paraviewTouchOpenFOAMParallel
+        for region in $regionlist; do
+            paraviewTouchOpenFOAMParallel "$region"
+        done
+    fi
+fi
+
+if [[ $flagReset -eq 1 ]]; then
+
+    if [[ $flagParallel -eq 1 ]] || \
+       [[ $flagParallel2 -eq 1 ]]; then
+
+        # Clean time directories
+        cleanTimeDirectoriesParallel
+
+    else
+
+        # Clean time directories
+        cleanTimeDirectories
+
+    fi
+
+    # Remove solver log
+    rm "log.$(getApplication)" > /dev/null 2>&1
+
+fi
+
+if [[ $flagRun -eq 1 ]]; then
+    if [[ $flagParallel -eq 1 ]] || \
+       [[ $flagParallel2 -eq 1 ]]; then
+
+        np=$(ls -1d processor* | wc -l)
+        runParallel $np \
+            $(getApplication) || exit 1
+
+    else
+
+        runApplication \
+            $(getApplication) || exit 1
+
+    fi
+fi

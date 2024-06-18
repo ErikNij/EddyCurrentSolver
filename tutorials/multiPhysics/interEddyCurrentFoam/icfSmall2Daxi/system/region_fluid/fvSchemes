@@ -1,0 +1,74 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default             Euler;
+//     default             CrankNicolson 0;
+//     default             CrankNicolson 0.5;
+//     default             CrankNicolson 1;
+//     default             backward;
+}
+
+gradSchemes
+{
+    default             Gauss linear;
+}
+
+divSchemes
+{
+    default             Gauss linear;
+
+    div(rho*phi,U)      Gauss upwind phi;
+//     div(rho*phi,U)      Gauss limitedLinearV 1
+//     div(rho*phi,U)      Gauss GammaVDC 0.5;
+//     div(rho*phi,U)      Gauss linear;
+
+
+    div(phi,k)          Gauss upwind phi;
+    div(phi,epsilon)    Gauss upwind phi;
+    div(phi,omega)      Gauss upwind phi;
+    div(phi,nuTilda)    Gauss upwind phi;
+//     div(phi,k)          Gauss limitedLinear 1;
+//     div(phi,epsilon)    Gauss limitedLinear 1;
+//     div(phi,omega)      Gauss limitedLinear 1;
+//     div(phi,nuTilda)    Gauss limitedLinear 1;
+//     div(phi,k)          Gauss Gamma 0.5;
+//     div(phi,epsilon)    Gauss Gamma 0.5;
+//     div(phi,omega)      Gauss Gamma 0.5;
+//     div(phi,nuTilda)    Gauss Gamma 0.5;
+//     div(phi,k)          Gauss linear;
+//     div(phi,epsilon)    Gauss linear;
+//     div(phi,omega)      Gauss linear;
+//     div(phi,nuTilda)    Gauss linear;
+
+
+    div(phi,alpha)      Gauss vanLeer01;
+    div(phirb,alpha)    Gauss interfaceCompression;
+//     div(phirb,alpha)    Gauss linear;
+}
+
+laplacianSchemes
+{
+    default             Gauss linear corrected;
+}
+
+interpolationSchemes
+{
+    default             linear;
+}
+
+// ************************************************************************* //

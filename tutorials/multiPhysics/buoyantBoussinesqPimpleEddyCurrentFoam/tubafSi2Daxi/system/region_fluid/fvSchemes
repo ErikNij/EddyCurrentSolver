@@ -1,0 +1,97 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default                               none;
+
+    ddt(U)                                Euler;
+
+    ddt(k)                                Euler;
+    ddt(omega)                            Euler;
+    ddt(epsilon)                          Euler;
+    ddt(nuTilda)                          Euler;
+}
+
+gradSchemes
+{
+    default                               none;
+
+    grad(U)                               Gauss skewCorrected linear;
+    grad(p)                               Gauss skewCorrected linear;
+
+    grad(k)                               Gauss skewCorrected linear;
+    grad(omega)                           Gauss skewCorrected linear;
+    grad(epsilon)                         Gauss skewCorrected linear;
+    grad(nuTilda)                         Gauss skewCorrected linear;
+}
+
+divSchemes
+{
+    default                               none;
+
+    div(phi,U)                            Gauss upwind phi;
+    div(rho*phi,U)                        Gauss upwind phi;
+    div((mu*dev(grad(U).T())))            Gauss linear;
+    div((muEff*dev(grad(U).T())))         Gauss linear;
+    div((nuEff*dev(T(grad(U)))))          Gauss linear;
+
+    div(phi,k)                            Gauss upwind phi;
+    div(phi,epsilon)                      Gauss upwind phi;
+    div(phi,omega)                        Gauss upwind phi;
+    div(phi,nuTilda)                      Gauss upwind phi;
+}
+
+laplacianSchemes
+{
+    default                               none;
+
+    laplacian(mu,U)                       Gauss linear corrected;
+    laplacian(muEff,U)                    Gauss linear corrected;
+    laplacian(nuEff,U)                    Gauss linear corrected;
+    laplacian(rAUf,p)                     Gauss linear corrected;
+
+    laplacian(DkEff,k)                    Gauss linear corrected;
+    laplacian(DomegaEff,omega)            Gauss linear corrected;
+    laplacian(DepsilonEff,epsilon)        Gauss linear corrected;
+    laplacian(DnuTildaEff,nuTilda)        Gauss linear corrected;
+}
+
+interpolationSchemes
+{
+    default                               none;
+
+    interpolate(rho)                      skewCorrected linear;
+    interpolate(U)                        skewCorrected linear;
+    interpolate(rAU)                      skewCorrected linear;
+    interpolate(HbyA)                     skewCorrected linear;
+    interpolate(F)                        skewCorrected linear;
+
+    interpolate(grad(U))                  skewCorrected linear;
+    interpolate(grad(p))                  skewCorrected linear;
+
+    interpolate(grad(k))                  skewCorrected linear;
+    interpolate(grad(epsilon))            skewCorrected linear;
+    interpolate(grad(omega))              skewCorrected linear;
+
+    // ddtPhiCorr
+    interpolate(U_0)                      skewCorrected linear;
+    interpolate(((1|deltaT)*rAU))         skewCorrected linear;
+
+    interpolate(rhok)                     skewCorrected linear;
+}
+
+// ************************************************************************* //

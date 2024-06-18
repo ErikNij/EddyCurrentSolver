@@ -1,0 +1,10 @@
+../../../../../.wm_project_dir/src/finiteVolume/lnInclude
+../../../../../.wm_project_dir/src/VectorN/lnInclude
+
+../../../../../src/foamTools/lnInclude
+../../../../../src/regionModel/lnInclude
+
+../../../../solvers/electromagnetics/eddyCurrentFoam/edgeBiotSavart
+../../../../solvers/electromagnetics/eddyCurrentFoam/eddyCurrentApp
+
+../../../../solvers/electromagnetics/eddyCurrentFoam/include

@@ -1,0 +1,11 @@
+//
+// createRegionPolyMeshUninitialized.H
+// ~~~~~~~~~~~~~~~~~~
+
+    Foam::Info
+        << "Create region polyMesh for time = "
+        << runTime.timeName() << endl;
+
+    Foam::regionPolyMesh regionMesh(runTime, false);
+
+    Foam::Info << Foam::endl;

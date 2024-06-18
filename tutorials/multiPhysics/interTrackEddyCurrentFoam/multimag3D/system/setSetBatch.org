@@ -1,0 +1,121 @@
+# All
+
+cellSet  cellSet_all                                                  new    
+cellSet  cellSet_all                                                  invert 
+
+# Bodies
+
+pointSet pointSet_body_coils                                          new    surfaceToPoint "constant/triSurface/geometry_body_coils.stl" 0.0002 true false
+cellSet  cellSet_body_coils                                           new    pointToCell pointSet_body_coils all
+pointSet pointSet_body_coils                                          remove 
+
+pointSet pointSet_body_all                                            new    surfaceToPoint "constant/triSurface/geometry_body_all.stl" 0.0002 true false
+cellSet  cellSet_body_all                                             new    pointToCell pointSet_body_all all
+pointSet pointSet_body_all                                            remove 
+
+pointSet pointSet_body_conductor                                      new    surfaceToPoint "constant/triSurface/geometry_body_conductor.stl" 0.0002 true false
+cellSet  cellSet_body_conductor                                       new    pointToCell pointSet_body_conductor all
+pointSet pointSet_body_conductor                                      remove 
+
+pointSet pointSet_body_buffer                                         new    surfaceToPoint "constant/triSurface/geometry_body_buffer.stl" 0.0002 true false
+cellSet  cellSet_body_buffer                                          new    pointToCell pointSet_body_buffer all
+pointSet pointSet_body_buffer                                         remove 
+
+pointSet pointSet_body_fluid                                          new    surfaceToPoint "constant/triSurface/geometry_body_fluid.stl" 0.0002 true false
+cellSet  cellSet_body_fluid                                           new    pointToCell pointSet_body_fluid all
+pointSet pointSet_body_fluid                                          remove 
+
+pointSet pointSet_body_below                                          new    surfaceToPoint "constant/triSurface/geometry_body_below.stl" 0.0002 true false
+cellSet  cellSet_body_below                                           new    pointToCell pointSet_body_below all
+pointSet pointSet_body_below                                          remove 
+
+pointSet pointSet_body_above                                          new    surfaceToPoint "constant/triSurface/geometry_body_above.stl" 0.0002 true false
+cellSet  cellSet_body_above                                           new    pointToCell pointSet_body_above all
+pointSet pointSet_body_above                                          remove 
+
+pointSet pointSet_body_coil                                           new    surfaceToPoint "constant/triSurface/geometry_body_coil.stl" 0.0002 true false
+cellSet  cellSet_body_coil                                            new    pointToCell pointSet_body_coil all
+pointSet pointSet_body_coil                                           remove 
+
+# Shells
+
+pointSet pointSet_shell_fixedMesh                                     new    surfaceToPoint "constant/triSurface/geometry_shell_fixedMesh.stl" 0.0002 false false
+faceSet  faceSet_shell_fixedMesh                                      new    pointToFace pointSet_shell_fixedMesh all
+pointSet pointSet_shell_fixedMesh                                     remove 
+
+pointSet pointSet_shell_trackedSurface                                new    surfaceToPoint "constant/triSurface/geometry_shell_trackedSurface.stl" 0.0002 false false
+faceSet  faceSet_shell_trackedSurface                                 new    pointToFace pointSet_shell_trackedSurface all
+pointSet pointSet_shell_trackedSurface                                remove 
+
+pointSet pointSet_shell_infinity                                      new    surfaceToPoint "constant/triSurface/geometry_shell_infinity.stl" 0.0002 false false
+faceSet  faceSet_shell_infinity                                       new    pointToFace pointSet_shell_infinity all
+pointSet pointSet_shell_infinity                                      remove 
+
+pointSet pointSet_shell_sideWall                                      new    surfaceToPoint "constant/triSurface/geometry_shell_sideWall.stl" 0.0002 false false
+faceSet  faceSet_shell_sideWall                                       new    pointToFace pointSet_shell_sideWall all
+pointSet pointSet_shell_sideWall                                      remove 
+
+pointSet pointSet_shell_bottomWall                                    new    surfaceToPoint "constant/triSurface/geometry_shell_bottomWall.stl" 0.0002 false false
+faceSet  faceSet_shell_bottomWall                                     new    pointToFace pointSet_shell_bottomWall all
+pointSet pointSet_shell_bottomWall                                    remove 
+
+# Regions
+
+cellSet  cellSet_region_fluid                                         new    
+cellSet  cellSet_region_fluid                                         add    setToCell cellSet_body_fluid
+
+cellSet  cellSet_region_buffer                                        new    
+cellSet  cellSet_region_buffer                                        add    setToCell cellSet_body_buffer
+
+cellSet  cellSet_region_conductor                                     new    
+cellSet  cellSet_region_conductor                                     add    setToCell cellSet_body_fluid
+
+faceSet  faceSet_regions0                                             new    
+faceSet  faceSet_regions0                                             add    cellToFace cellSet_region_fluid all
+faceSet  faceSet_regions0                                             delete cellToFace cellSet_region_fluid both
+faceSet  faceSet_regions1                                             new    
+faceSet  faceSet_regions1                                             add    cellToFace cellSet_region_buffer all
+faceSet  faceSet_regions1                                             delete cellToFace cellSet_region_buffer both
+faceSet  faceSet_regions2                                             new    
+faceSet  faceSet_regions2                                             add    cellToFace cellSet_region_conductor all
+faceSet  faceSet_regions2                                             delete cellToFace cellSet_region_conductor both
+faceSet  faceSet_regions3                                             new    
+faceSet  faceSet_regions3                                             add    cellToFace cellSet_all all
+faceSet  faceSet_regions3                                             delete cellToFace cellSet_all both
+
+faceSet  faceSet_regions                                              new    
+faceSet  faceSet_regions                                              add    setToFace faceSet_regions0
+faceSet  faceSet_regions                                              add    setToFace faceSet_regions1
+faceSet  faceSet_regions                                              add    setToFace faceSet_regions2
+faceSet  faceSet_regions                                              delete setToFace faceSet_regions3
+
+faceSet  faceSet_regions0                                             remove 
+faceSet  faceSet_regions1                                             remove 
+faceSet  faceSet_regions2                                             remove 
+faceSet  faceSet_regions3                                             remove 
+
+# Patches
+
+faceSet  faceSet_patch_infinity                                       new    
+faceSet  faceSet_patch_infinity                                       add    setToFace faceSet_shell_infinity
+
+faceSet  faceSet_patch_fixedMesh                                      new    
+faceSet  faceSet_patch_fixedMesh                                      add    setToFace faceSet_shell_fixedMesh
+
+faceSet  faceSet_patch_bottomWall                                     new    
+faceSet  faceSet_patch_bottomWall                                     add    setToFace faceSet_shell_bottomWall
+
+faceSet  faceSet_patch_sideWall                                       new    
+faceSet  faceSet_patch_sideWall                                       add    setToFace faceSet_shell_sideWall
+
+faceSet  faceSet_patch_trackedSurface                                 new    
+faceSet  faceSet_patch_trackedSurface                                 add    setToFace faceSet_shell_trackedSurface
+
+# Materials
+
+cellSet  cellSet_material_liquidMetal                                 new    
+cellSet  cellSet_material_liquidMetal                                 add    setToCell cellSet_body_fluid
+
+# End
+
+quit

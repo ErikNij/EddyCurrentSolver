@@ -1,0 +1,55 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      changeDictionaryDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dictionaryReplacement
+{
+    boundary
+    {
+        ggiLeftStatic
+        {
+            type            ggi;
+            shadowPatch     ggiLeftDynamic;
+            zone            ggiLeftStatic;
+            bridgeOverlap   false;
+        }
+
+        ggiLeftDynamic
+        {
+            type            ggi;
+            shadowPatch     ggiLeftStatic;
+            zone            ggiLeftDynamic;
+            bridgeOverlap   false;
+        }
+
+        ggiRightStatic
+        {
+            type            ggi;
+            shadowPatch     ggiRightDynamic;
+            zone            ggiRightStatic;
+            bridgeOverlap   false;
+        }
+
+        ggiRightDynamic
+        {
+            type            ggi;
+            shadowPatch     ggiRightStatic;
+            zone            ggiRightDynamic;
+            bridgeOverlap   false;
+        }
+    }
+}
+
+// ************************************************************************* //

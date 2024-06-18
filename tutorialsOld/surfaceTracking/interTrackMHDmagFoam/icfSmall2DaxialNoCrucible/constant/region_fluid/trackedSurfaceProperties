@@ -1,0 +1,36 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      trackedSurfaceProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+twoFluids                                    no;
+
+cleanInterface                               yes;
+
+noCleanTangentialSurfaceTensionCorrection    yes;
+
+normalMotionDir                              no;
+
+motionDir                                    (0 0 1);
+
+fixedTrackedSurfacePatches                   0();
+
+pointNormalsCorrectionPatches                3(fixedWallSide front back);
+// pointNormalsCorrectionPatches               2(front back);
+
+nTrackedSurfaceCorrectors                    1;
+
+smoothing                                    yes;
+
+// ************************************************************************* //

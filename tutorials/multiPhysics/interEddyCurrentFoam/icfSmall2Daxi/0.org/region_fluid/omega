@@ -1,0 +1,65 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      omega;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 -1 0 0 0 0];
+
+internalField   uniform 0;
+
+boundaryField
+{
+    axis
+    {
+        type            slip;
+    }
+    front
+    {
+        type            wedge;
+    }
+    back
+    {
+        type            wedge;
+    }
+//     atmosphere
+//     {
+//         type            inletOutlet;
+// //        inletValue      $internalField;
+// //        value           $internalField;
+// // TODO: Values?
+//         inletValue      0.72043816;
+//         value           0.72043816;
+//     }
+    atmosphere
+    {
+        type            slip;
+    }
+    sideWall
+    {
+        type            omegaWallFunction;
+        value           $internalField;
+    }
+    bottomWall
+    {
+        type            omegaWallFunction;
+        value           $internalField;
+    }
+    "procBoundary.*"
+    {
+        type            processor;
+        value           $internalField;
+    }
+}
+
+// ************************************************************************* //

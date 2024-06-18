@@ -1,0 +1,155 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+|    _ _ _ _    |                                                              |
+| //         \\ | Creative Fields cfMeshPRO                                  |
+| | cfMeshPRO | |                                                              |
+| \\ _ _ _ _ // | Version: 0.0.99                                            |
+|               | Web: www.c-fields.com e-mail: support@c-fields.com           |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+version 2;
+format ascii;
+class dictionary;
+location "system";
+object meshDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+surfaceFile "mesh.ftr";
+
+maxCellSize 0.0004;
+
+// anisotropicSources
+// {
+//     box
+//     {
+//         type     box;
+//         centre   ( 0 0 0.0005);
+//         lengthX  0.008;
+//         lengthY  0.008;
+//         lengthZ  -0.001;
+//
+//         scalingX 1;
+//         scalingY 1;
+//         scalingZ 1;
+//     }
+// }
+
+objectRefinements
+{
+    cone_coarse
+    {
+        type    cone;
+        p0      (0 0 0);
+        p1      (0 0 -0.001);
+        radius0 0.00300;
+        radius1 0.00300;
+
+        additionalRefinementLevels 1;
+    }
+    cone_fine
+    {
+        type    cone;
+        p0      (0 0 0);
+        p1      (0 0 -0.001);
+        radius0 0.00100;
+        radius1 0.00100;
+
+        additionalRefinementLevels 2;
+    }
+    sphere_finer
+    {
+        type   sphere;
+        centre (0 0 0);
+        radius 0.00050;
+
+        additionalRefinementLevels 3;
+    }
+}
+
+localRefinement
+{
+    "patch0_6"
+    {
+        additionalRefinementLevels 4;
+//         refinementThickness 0.00010;
+    }
+}
+
+boundaryLayers
+{
+    patchBoundaryLayers
+    {
+        "patch0_3"
+        {
+            nLayers        3;
+            thicknessRatio 1.1;
+        }
+        "patch0_4"
+        {
+            nLayers        3;
+            thicknessRatio 1.1;
+        }
+        "patch0_6"
+        {
+            nLayers        3;
+            thicknessRatio 1.1;
+        }
+    }
+
+    optimiseLayer 1;
+
+    optimisationParameters
+    {
+        nSmoothNormals     5;
+        maxNumIterations   5;
+        featureSizeFactor  0.4;
+        reCalculateNormals 1;
+        relThicknessTol    0.05;
+    }
+}
+
+renameBoundary
+{
+    newPatchNames
+    {
+        "patch0_0"
+        {
+            newName     top;
+            newType     patch;
+        }
+        "patch0_1"
+        {
+            newName     left;
+            newType     patch;
+        }
+        "patch0_2"
+        {
+            newName     right;
+            newType     patch;
+        }
+        "patch0_3"
+        {
+            newName     front;
+            newType     wall;
+        }
+        "patch0_4"
+        {
+            newName     back;
+            newType     wall;
+        }
+        "patch0_5"
+        {
+            newName     bottom;
+            newType     patch;
+        }
+        "patch0_6"
+        {
+            newName     trackedSurface;
+            newType     patch;
+        }
+    }
+}
+
+// ************************************************************************* //

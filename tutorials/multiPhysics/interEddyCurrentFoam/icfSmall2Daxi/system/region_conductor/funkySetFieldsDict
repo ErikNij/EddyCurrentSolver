@@ -1,0 +1,62 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      funkySetFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+materialProperties
+(
+    // Data from Vladi
+    "sigma_woodsmetal=1.0e+6;"  // Conductivity of liquid silicon in [S/m]
+    "sigma_air=1.0e+0;"         // Conductivity of solid silicon in [S/m]
+    "sigma_steel=1.43e+6;"      // Conductivity of steel in [S/m]
+);
+
+expressions
+(
+    sigma_reset
+    {
+        field         sigma;
+        expression    "0";
+        keepPatches   true;
+    }
+
+    sigma_air
+    {
+        field         sigma;
+        variables     $materialProperties;
+        expression    "sigma_air";
+        condition     "set(cellSet_material_woodsandair)";
+        keepPatches   true;
+    }
+
+    sigma_woodsmetal
+    {
+        field         sigma;
+        variables     $materialProperties;
+        expression    "sigma_woodsmetal";
+        condition     "set(cellSet_material_woodsandair) && pos().z < 0.235";
+        keepPatches   true;
+    }
+
+    sigma_steel
+    {
+        field         sigma;
+        variables     $materialProperties;
+        expression    "sigma_steel";
+        condition     "set(cellSet_material_steel)";
+        keepPatches   true;
+    }
+);
+
+// ************************************************************************* //

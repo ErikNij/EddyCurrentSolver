@@ -1,0 +1,91 @@
+#!/bin/bash
+
+# Remove old polyMesh
+rm -rf '0/polyMesh'
+rm -rf 'constant/polyMesh'
+
+# Create blockMeshDict
+./setup/blockMeshDict.py || exit 1
+
+# Run blockMesh to get 2D mesh
+blockMesh || exit 1
+
+# Run snappyHexMesh to do refinement
+snappyHexMesh -overwrite || exit 1
+
+# Remove leftovers from snappyHexMesh
+rm -rf 'constant/cellLevel' \
+        'constant/polyMesh/cellLevel'* \
+        'constant/pointLevel' \
+        'constant/polyMesh/pointLevel'* \
+        'constant/polyMesh/refinementHistory'* \
+        'constant/polyMesh/surfaceIndex'* \
+        'constant/polyMesh/level0Edge' \
+        > /dev/null 2>&1
+
+# Remove all sets and zones
+# WARNING: This is IMPORTANT!
+rm "constant/polyMesh/sets/"* > /dev/null 2>&1
+rm "constant/polyMesh/cellZones" > /dev/null 2>&1
+rm "constant/polyMesh/faceZones" > /dev/null 2>&1
+rm "constant/polyMesh/pointZones" > /dev/null 2>&1
+
+# Remove empty patches
+cp 'system/createPatchDict.mesh' 'system/createPatchDict'
+createPatch -overwrite || exit 1
+cp 'system/createPatchDict.default' 'system/createPatchDict'
+
+# Create a 2D mesh again (gives patches: originalPatch, otherSide, sides)
+extrudeMesh || exit 1
+
+# Change patch types of originalPatch and otherSide to empty
+cp 'system/changeDictionaryDict.mesh' 'system/changeDictionaryDict'
+changeDictionary || exit 1
+cp 'system/changeDictionaryDict.default' 'system/changeDictionaryDict'
+
+# Convert 2D mesh into wedge
+makeWedgeMesh || exit 1
+
+# Collapse edges
+collapseEdges -overwrite 1e-30 0 || exit 1
+
+# Renumber mesh
+renumberMesh -overwrite || exit 1
+
+# Move new polyMesh files to storage folder
+mesh0Folder='0/polyMesh'
+meshFolder='constant/polyMesh'
+[[ ! -e "$meshFolder" ]] && mkdir "$meshFolder"
+if [[ -e "$mesh0Folder" ]]; then
+
+    mv "$mesh0Folder/blockMeshDict" \
+       "$mesh0Folder/boundary" \
+       "$mesh0Folder/faces" \
+       "$mesh0Folder/neighbour" \
+       "$mesh0Folder/owner" \
+       "$mesh0Folder/points" \
+       "$meshFolder/" \
+        > /dev/null 2>&1
+
+fi
+
+meshBakFolder='constant/polyMesh.org'
+[[ ! -e "$meshBakFolder" ]] && mkdir "$meshBakFolder"
+mv "$meshFolder/blockMeshDict" \
+   "$meshFolder/boundary" \
+   "$meshFolder/faces" \
+   "$meshFolder/neighbour" \
+   "$meshFolder/owner" \
+   "$meshFolder/points" \
+   "$meshBakFolder/" \
+    > /dev/null 2>&1
+
+# Remove polyMesh
+rm -rf "$meshFolder"
+rm -rf "$mesh0Folder"
+if [[ -e '0' ]]; then
+    [[ -z "$(ls -A '0' 2> /dev/null)" ]] && rmdir '0'
+fi
+
+# Copy mesh to constant
+cp -r "$meshBakFolder" "$meshFolder"

@@ -1,0 +1,191 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+AV
+{
+//     method                       "coupled";
+    method                       "segregated";
+//     method                       "coupledSegregated";
+
+    coupled
+    {
+        coupledCorr              1;
+    }
+
+    segregated
+    {
+        segregatedCorr           1;
+    }
+
+    coupledSegregated
+    {
+        coupledCorr              1;
+        segregatedCorr           3;
+    }
+}
+
+solvers
+{
+    "(AV)"
+//     {
+//         solver                   GaussSeidel;
+//         nSweeps                  1;
+//         tolerance                1e-07;
+// //         relTol                   1e-03;
+// //         relTol                   1e-06;
+//         relTol                   0;
+//         minIter                  1;
+//         maxIter                  100;
+//         preconditioner           none;
+//     }
+//     {
+//         solver                   GMRES;
+//         nDirections              5;
+//         tolerance                1e-07;
+// //         relTol                   1e-03;
+// //         relTol                   1e-06;
+//         relTol                   0;
+//         minIter                  1;
+// //         maxIter                  10;
+//         maxIter                  20;
+// //         maxIter                  500;
+//         preconditioner           Cholesky;
+//     }
+    {
+        solver                   BiCGStab;
+        tolerance                1e-06;
+//         relTol                   1e-03;
+        relTol                   1e-05;
+//         relTol                   1e-06;
+//         relTol                   0;
+        minIter                  1;
+//         maxIter                  10;
+//         maxIter                  20;
+        maxIter                  50;
+//         maxIter                  500;
+        preconditioner           Cholesky;
+    }
+//     {
+//         solver          AMG;
+//         cycle           V-cycle;
+//         coarseningType  AAMG;
+//         norm            maxNorm; // componentNorm, maxNorm, twoNorm
+// //         normComponent   0; // for norm=componentNorm
+//
+//         nPreSweeps      0;
+//         nPostSweeps     2;
+//         groupSize       10;
+//         minCoarseEqns   4;
+//         nMaxLevels      100;
+//         scale           on;
+//         smoother        GaussSeidel; // ILU, GaussSeidel
+//
+//         minIter         0;
+// //         maxIter         10;
+//         maxIter         20;
+// //         maxIter         100;
+// //         maxIter         500;
+//         tolerance       1e-07;
+// //         relTol          1e-03;
+// //         relTol          1e-06;
+//         relTol          0;
+//     }
+
+
+    "(A)"
+    {
+        solver                   BiCGStab;
+
+        tolerance                1e-06;
+        relTol                   1e-05;
+//         relTol                   0;
+        minIter                  1;
+//         maxIter                  10;
+//         maxIter                  20;
+        maxIter                  50;
+//         maxIter                  500;
+
+        preconditioner           Cholesky;
+    }
+//     {
+//         solver          AMG;
+//         cycle           V-cycle;
+//         coarseningType  AAMG;
+//         norm            twoNorm; // componentNorm, maxNorm, twoNorm
+// //         normComponent   0; // for norm=componentNorm
+//
+//         nPreSweeps      0;
+//         nPostSweeps     2;
+//         groupSize       3;
+//         minCoarseEqns   4;
+//         nMaxLevels      100;
+//         scale           on;
+//         smoother        ILU; // ILU, GaussSeidel
+//
+//         minIter         0;
+// //         maxIter         10;
+//         maxIter         20;
+// //         maxIter         100;
+// //         maxIter         500;
+//         tolerance       1e-07;
+// //         relTol          1e-03;
+// //         relTol          1e-06;
+//         relTol          0;
+//     }
+
+    "(VRe|VIm)"
+//     {
+//         solver                   PCG;
+//
+//         tolerance                1e-06;
+//         relTol                   1e-05;
+// //         relTol                   0;
+//         minIter                  1;
+//         maxIter                  1000;
+//
+//         preconditioner           DIC;
+//     }
+    {
+        solver                   GAMG;
+
+        tolerance                1e-06;
+        relTol                   1e-05;
+//         relTol                   0;
+        minIter                  1;
+        maxIter                  100;
+
+        smoother                 DICGaussSeidel;
+        nPreSweeps               2;
+        nPostSweeps              2;
+        cacheAgglomeration       on;
+        agglomerator             faceAreaPair;
+        nCellsInCoarsestLevel    200;
+        mergeLevels              1;
+    }
+}
+
+Magnetic
+{
+    update
+    {
+        active           on;
+        outputCycle      2147483647;
+        timeStepCycle    10;
+        timeCycle        1e+100;
+    }
+}
+
+// ************************************************************************* //

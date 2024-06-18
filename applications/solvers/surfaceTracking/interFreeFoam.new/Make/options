@@ -1,0 +1,18 @@
+EXE_INC = \
+    -I../include.new \
+    -I../freeSurface.new/lnInclude \
+    -I$(LIB_SRC)/dynamicMesh/dynamicFvMesh/lnInclude \
+    -I$(LIB_SRC)/finiteArea/lnInclude \
+    -I$(LIB_SRC)/meshTools/lnInclude \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    $(WM_DECOMP_INC)
+
+EXE_LIBS = \
+    -L$(FOAM_USER_LIBBIN) \
+    -lnewFreeSurface \
+    -ldynamicFvMesh \
+    -ldynamicMesh \
+    -lfiniteArea \
+    -lmeshTools \
+    -lfiniteVolume \
+    $(WM_DECOMP_LIBS)

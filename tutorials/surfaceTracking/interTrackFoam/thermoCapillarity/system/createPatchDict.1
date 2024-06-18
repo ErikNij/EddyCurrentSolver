@@ -1,0 +1,106 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      createPatchDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+matchTolerance 1e-12;
+
+pointSync true;
+
+patchInfo
+(
+    {
+        name             trackedSurface;
+        constructFrom    patches;
+        patches          (inner);
+
+        dictionary
+        {
+            type         patch;
+        }
+    }
+
+    {
+        name             left;
+        constructFrom    set;
+        set              left;
+
+        dictionary
+        {
+            type         patch;
+        }
+    }
+
+    {
+        name             right;
+        constructFrom    set;
+        set              right;
+
+        dictionary
+        {
+            type         patch;
+        }
+    }
+
+    {
+        name             top;
+        constructFrom    set;
+        set              top;
+
+        dictionary
+        {
+            type         patch;
+        }
+    }
+
+    {
+        name             bottom;
+        constructFrom    set;
+        set              bottom;
+
+        dictionary
+        {
+            type         patch;
+        }
+    }
+
+    {
+        name             front;
+        constructFrom    set;
+        set              front;
+
+        dictionary
+        {
+            type         empty;
+        }
+    }
+
+    {
+        name             back;
+        constructFrom    set;
+        set              back;
+
+        dictionary
+        {
+            type         empty;
+        }
+    }
+);
+
+// OpenFOAM syntax
+patches
+(
+);
+
+// ************************************************************************* //

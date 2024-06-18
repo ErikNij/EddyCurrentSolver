@@ -1,0 +1,36 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      changeDictionaryDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dictionaryReplacement
+{
+    boundary
+    {
+//         conductorSurface
+//         {
+//             type            directMappedPatch;
+//             sampleMode      nearestPatchFace;
+//             sampleRegion    region_space;
+//             samplePatch     conductorSurface;
+//             offset          (0 0 0);
+//         }
+        conductorSurface
+        {
+            type            patch;
+        }
+    }
+}
+
+// ************************************************************************* //

@@ -1,0 +1,12 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # run from this directory
+set -x
+
+rm -rf foamTools/lnInclude 2>/dev/null
+wclean foamTools || exit 1
+
+rm -rf regionModel/lnInclude 2>/dev/null
+wclean regionModel || exit 1
+
+wcleanLnIncludeAll . || exit 1
+

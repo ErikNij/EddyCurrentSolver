@@ -1,0 +1,59 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      edgeBiotSavartProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+nNonOrthogonalCorrectors    10;
+
+// currentAmplitude            37.2161; // = 1414.2136 / (4*10-2)
+currentAmplitude            26.3158; // = 1000.0000 / (4*10-2)
+// currentAmplitude            19.7368; // =  750.0000 / (4*10-2)
+// currentAmplitude            13.1579; // =  500.0000 / (4*10-2)
+
+inductors
+{
+    coil0
+    {
+        file       "coil0.eMesh";
+        reverse    false;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil1
+    {
+        file       "coil1.eMesh";
+        reverse    false;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil2
+    {
+        file       "coil2.eMesh";
+        reverse    false;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil3
+    {
+        file       "coil3.eMesh";
+        reverse    false;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+}
+
+// ************************************************************************* //

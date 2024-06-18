@@ -1,0 +1,56 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default                           none;
+}
+
+gradSchemes
+{
+    default                           none;
+
+    grad(sigma)                       leastSquares;
+
+    grad(VRe)                         leastSquares;
+    grad(VIm)                         leastSquares;
+
+    snGradCorr(VRe)                   leastSquares;
+    snGradCorr(VIm)                   leastSquares;
+}
+
+divSchemes
+{
+    default                           none;
+
+    div(ARe)                          leastSquares;
+    div(AIm)                          leastSquares;
+}
+
+laplacianSchemes
+{
+    default                           none;
+
+    laplacian(sigma,VRe)              Gauss linear corrected;
+    laplacian(sigma,VIm)              Gauss linear corrected;
+}
+
+interpolationSchemes
+{
+    default                           none;
+}
+
+// ************************************************************************* //

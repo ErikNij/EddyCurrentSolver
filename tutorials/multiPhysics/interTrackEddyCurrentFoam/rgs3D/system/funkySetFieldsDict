@@ -1,0 +1,146 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      funkySetFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+inductorData
+(
+    "coil_rms=1000.0;"                // Inductor current rms value in [A]
+    "coil_ldx=0.005;"                 // Inductor loop cross section x width in [m]
+    "coil_ldz=0.005;"                 // Inductor loop cross section z width in [m]
+    "coil_area=coil_ldx*coil_ldz;"    // Inductor cross section area in [m^2]
+    "coil_amp=sqrt(2)*coil_rms;"      // Inductor current amplitude in [A]
+    "coil_den=coil_amp/coil_area;"    // Inductor current density in [A/m^2]
+    "coil_r=0.008;"                   // Inductor center radius [m]
+    "coil_x0=0.065;"                  // Inductor center x size in [m]
+    "coil_y0=0.120;"                  // Inductor center y size in [m]
+    "coil_rx0=coil_x0-coil_r;"        // Inductor inner x size in [m]
+    "coil_ry0=coil_y0-coil_r;"        // Inductor inner y size in [m]
+);
+
+expressions
+(
+    j0Re_coil_reset
+    {
+        field         j0Re;
+        expression    "vector (0,0,0)";
+        keepPatches   true;
+    }
+
+    j0Re_coil_x_plus
+    {
+        field         j0Re;
+        variables     $inductorData;
+        condition     "   set(cellSet_geometry_coil) \
+                       && pos().x>=0                 \
+                       && mag(pos().y)<=coil_ry0     ";
+        expression    "vector (0,coil_den,0)";
+        keepPatches   true;
+    }
+
+    j0Re_coil_x_minus
+    {
+        field         j0Re;
+        variables     $inductorData;
+        condition     "   set(cellSet_geometry_coil) \
+                       && pos().x<=0                 \
+                       && mag(pos().y)<=coil_ry0     ";
+        expression    "vector (0,-coil_den,0)";
+        keepPatches   true;
+    }
+
+    j0Re_coil_y_plus
+    {
+        field         j0Re;
+        variables     $inductorData;
+        condition     "   set(cellSet_geometry_coil) \
+                       && pos().y>=0                 \
+                       && mag(pos().x)<=coil_rx0     ";
+        expression    "vector (-coil_den,0,0)";
+        keepPatches   true;
+    }
+
+    j0Re_coil_y_minus
+    {
+        field         j0Re;
+        variables     $inductorData;
+        condition     "   set(cellSet_geometry_coil) \
+                       && pos().y<=0                 \
+                       && mag(pos().x)<=coil_rx0     ";
+        expression    "vector (coil_den,0,0)";
+        keepPatches   true;
+    }
+
+    j0Re_coil_x_plus_y_plus
+    {
+        field         j0Re;
+        variables     $inductorData;
+        condition     "   set(cellSet_geometry_coil) \
+                       && pos().x>=coil_rx0          \
+                       && pos().y>=coil_ry0          ";
+        expression    "vector (                                                                                                              \
+                           1.0/(sqrt(pow((pos().y-coil_ry0)/(pos().x-coil_rx0),2)+1)) * ((pos().y-coil_ry0)/(pos().x-coil_rx0)) * -coil_den, \
+                           1.0/(sqrt(pow((pos().y-coil_ry0)/(pos().x-coil_rx0),2)+1))                                           *  coil_den, \
+                           0                                                                                                                 \
+                       )";
+        keepPatches   true;
+    }
+
+    j0Re_coil_x_minus_y_plus
+    {
+        field         j0Re;
+        variables     $inductorData;
+        condition     "   set(cellSet_geometry_coil) \
+                       && pos().x<=-coil_rx0         \
+                       && pos().y>=coil_ry0          ";
+        expression    "vector (                                                                                                              \
+                           1.0/(sqrt(pow((pos().y-coil_ry0)/(pos().x+coil_rx0),2)+1)) * ((pos().y-coil_ry0)/(pos().x+coil_rx0)) *  coil_den, \
+                           1.0/(sqrt(pow((pos().y-coil_ry0)/(pos().x+coil_rx0),2)+1))                                           * -coil_den, \
+                           0                                                                                                                 \
+                       )";
+        keepPatches   true;
+    }
+
+    j0Re_coil_x_plus_y_minus
+    {
+        field         j0Re;
+        variables     $inductorData;
+        condition     "   set(cellSet_geometry_coil) \
+                       && pos().x>=coil_rx0          \
+                       && pos().y<=-coil_ry0         ";
+        expression    "vector (                                                                                                              \
+                           1.0/(sqrt(pow((pos().y+coil_ry0)/(pos().x-coil_rx0),2)+1)) * ((pos().y+coil_ry0)/(pos().x-coil_rx0)) * -coil_den, \
+                           1.0/(sqrt(pow((pos().y+coil_ry0)/(pos().x-coil_rx0),2)+1))                                           *  coil_den, \
+                           0                                                                                                                 \
+                       )";
+        keepPatches   true;
+    }
+
+    j0Re_coil_x_minus_y_plus
+    {
+        field         j0Re;
+        variables     $inductorData;
+        condition     "   set(cellSet_geometry_coil) \
+                       && pos().x<=-coil_rx0         \
+                       && pos().y<=-coil_ry0         ";
+        expression    "vector (                                                                                                              \
+                           1.0/(sqrt(pow((pos().y+coil_ry0)/(pos().x+coil_rx0),2)+1)) * ((pos().y+coil_ry0)/(pos().x+coil_rx0)) *  coil_den, \
+                           1.0/(sqrt(pow((pos().y+coil_ry0)/(pos().x+coil_rx0),2)+1))                                           * -coil_den, \
+                           0                                                                                                                 \
+                       )";
+        keepPatches   true;
+    }
+);
+
+// ************************************************************************* //

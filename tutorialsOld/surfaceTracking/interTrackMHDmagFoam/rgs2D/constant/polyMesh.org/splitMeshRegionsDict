@@ -1,0 +1,38 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version 2.0;
+    format  ascii;
+    class   dictionary;
+    object  splitMeshRegionsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+3
+(
+    region_static
+    {
+        type       cellZone;
+        cellLabels List<label> 0();
+    }
+
+    region_dynamic
+    {
+        type       cellZone;
+        cellLabels List<label> 0();
+    }
+
+    region_fluid
+    {
+        type       cellZone;
+        cellLabels List<label> 0();
+    }
+)
+
+// ************************************************************************* //

@@ -1,0 +1,61 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// ************************* SIMLUTAITON TIMES ***************************** //
+
+application         laplaceFoam;
+
+startFrom           startTime;
+
+startTime           0;
+
+stopAt              endTime;
+
+endTime             1;
+
+// *************************** TIME STEPPING ******************************* //
+
+deltaT              1;
+
+// *************************** OUTPUT SETTINGS ***************************** //
+
+writeControl        timeStep;
+
+writeInterval       1;
+
+purgeWrite          0;
+
+writeFormat         ascii;
+
+writePrecision      6;
+
+writeCompression    compressed;
+
+timeFormat          general;
+
+timePrecision       8;
+
+// **************************** OTHER SETTINGS ***************************** //
+
+runTimeModifiable   yes;
+
+// **************************** DEBUG SWITCHES ***************************** //
+
+// *************************** FUNCTION OBJECTS **************************** //
+
+// ******************************* LIBRARIES ******************************* //
+
+// ************************************************************************* //

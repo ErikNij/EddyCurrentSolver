@@ -1,0 +1,70 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default                           none;
+}
+
+gradSchemes
+{
+    default                           none;
+
+    curl(ARe)                         Gauss linear;
+    curl(AIm)                         Gauss linear;
+    snGradCorr(ARe)                   Gauss linear;
+    snGradCorr(AIm)                   Gauss linear;
+
+    grad(VRe)                         Gauss linear;
+    grad(VIm)                         Gauss linear;
+    snGradCorr(VRe)                   Gauss linear;
+    snGradCorr(VIm)                   Gauss linear;
+
+    grad(sigma)                       Gauss linear;
+}
+
+divSchemes
+{
+    default                           none;
+
+    div(sigmaf,ARe)                   Gauss linear;
+    div(sigmaf,AIm)                   Gauss linear;
+}
+
+laplacianSchemes
+{
+    default                           none;
+
+    laplacian(ARe)                    Gauss linear corrected; // linear is not used here
+    laplacian(AIm)                    Gauss linear corrected; // linear is not used here
+
+    laplacian(sigmaf,VRe)             Gauss linear corrected; // linear is not used here
+    laplacian(sigmaf,VIm)             Gauss linear corrected; // linear is not used here
+}
+
+interpolationSchemes
+{
+    default                           none;
+
+    interpolate(sigma)                linear;
+}
+
+snGradSchemes
+{
+    default                           none;
+}
+
+// ************************************************************************* //

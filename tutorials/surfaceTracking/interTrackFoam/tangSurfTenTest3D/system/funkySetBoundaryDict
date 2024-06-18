@@ -1,0 +1,43 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      funkySetBoundaryDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+conc
+{
+    vars
+    (
+        "ddxc=25.4e+3;" // dc/dy = 25.4 mol/l/m = 25.4e+3 mol/m^4
+    );
+
+    field                 c;
+
+    expressions
+    (
+        {
+            target        value;
+            variables     $vars;
+            patchName     "top";
+            expression    "ddxc*(pos().y+0.004)";
+        }
+        {
+            target        value;
+            variables     $vars;
+            patchName     "bottom";
+            expression    "ddxc*(pos().y+0.004)";
+        }
+    );
+}
+
+// ************************************************************************* //

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Remove old featureEdgeMesh
+rm -rf constant/triSurface
+
+# Create geometry
+./setup/geometry.py || exit 1
+
+# Create setSetBatch
+./setup/setSetBatch.py || exit 1

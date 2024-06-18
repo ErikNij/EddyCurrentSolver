@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Remove old featureEdgeMesh
+rm -rf constant/featureEdgeMesh
+
+# Get blockMeshDict.py script from storage folder
+mkdir 'constant/featureEdgeMesh'
+cp -r 'constant/featureEdgeMesh.org/coil.py' 'constant/featureEdgeMesh/'
+
+# Create coil EN
+python3 constant/featureEdgeMesh/coil.py
+
+# Move created coils to the FeatureEdgeMesh Folder EN
+rm -rf featureEdgeMesh/
+mkdir featureEdgeMesh/
+mv *.eMesh featureEdgeMesh/
+cp featureEdgeMesh/* constant/featureEdgeMesh/
+
+for eMeshFile in $(ls -1 "featureEdgeMesh/"*".eMesh"); do
+
+    surfaceFeatureConvert "${eMeshFile#'constant/'}" "${eMeshFile%'.eMesh'}.vtk"
+
+done
+
+
+
+# Copy new featureEdgeMesh files to storage folder
+cp 'constant/featureEdgeMesh/'*'.eMesh' \
+   'constant/featureEdgeMesh.org/'
+cp 'constant/featureEdgeMesh/'*'.vtk' \
+   'constant/featureEdgeMesh.org/'
+   
+# Change from the new compactFaceList to the older faceList
+compactFaceToFace
+cp constant/polyMesh/faces2 constant/polyMesh.org/faces
+cp constant/polyMesh/faces2 constant/polyMesh/faces
+head -n 20 constant/polyMesh/faces

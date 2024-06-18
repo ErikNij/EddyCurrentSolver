@@ -1,0 +1,94 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    Up
+    {
+        solver          BiCGStab;
+        preconditioner  Cholesky;
+        tolerance       1e-08;
+        relTol          1e-02;
+
+        minIter         0;
+        maxIter         500;
+    }
+
+    p
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-08;
+        relTol          1e-02;
+    }
+
+    pFinal
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-08;
+        relTol          0;
+    }
+
+    U
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-08;
+        relTol          1e-02;
+    }
+}
+
+PIMPLE
+{
+    nOuterCorrectors            50;
+    nCorrectors                 1;
+    nNonOrthogonalCorrectors    5;
+    pRefPoint (0 0 0);
+    pRefValue 0;
+
+//     momentumPredictor no;
+
+    residualControl
+    {
+        Up
+        {
+                tolerance  1e-03;
+                relTol     1e-02;
+        }
+
+//         U
+//         {
+//                 tolerance  1e-08;
+//                 relTol     1e-02;
+//         }
+        p
+        {
+                tolerance  1e-03;
+                relTol     1e-02;
+        }
+     }
+}
+
+relaxationFactors
+{
+    p        0.3;
+    pFinal   1;
+
+    U        0.7;
+}
+
+// ************************************************************************* //

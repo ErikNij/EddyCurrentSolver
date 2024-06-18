@@ -1,0 +1,42 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      funkySetFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+materialProperties
+(
+    "sigma_aluminum_liquid=3.65e+6;"    // Conductivity of liquid Al in [S/m]
+);
+
+expressions
+(
+    sigma_reset
+    {
+        field         sigma;
+        variables     $materialProperties;
+        expression    "0";
+        keepPatches   true;
+    }
+
+    sigma_conductor
+    {
+        field         sigma;
+        variables     $materialProperties;
+        condition     "set(cellSet_material_conductor)";
+        expression    "sigma_aluminum_liquid";
+        keepPatches   true;
+    }
+);
+
+// ************************************************************************* //

@@ -1,0 +1,59 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      eddyCurrentProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+regions
+{
+    CONDUCTOR               region_conductor;
+    FLUID                   region_fluid;
+    BUFFER                  region_buffer;
+}
+
+settings
+{
+    biotSavart              false;
+    lorentzForce            true;
+    magneticPressure        false;
+    jouleHeat               false;
+
+    region_fluid
+    {
+        volumeForce         true;
+        snGradpFromFlux     true;
+    }
+}
+
+storage
+{
+    "(BRe|BIm)"
+    {
+        write               false;
+    }
+
+    "F"
+    {
+        write               false;
+    }
+
+    region_conductor
+    {
+        "(jRe|jIm)"
+        {
+            write           false;
+        }
+    }
+}
+
+// ************************************************************************* //

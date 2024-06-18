@@ -1,0 +1,56 @@
+#!/bin/bash
+
+if [[ -z "$1" ]]; then
+
+    echo 'Case name missing. Use $1!'
+    exit 1
+
+fi
+
+if [[ -z "$2" ]]; then
+
+    echo 'Mesh name missing. Use $2!'
+    exit 1
+
+fi
+
+if [[ -z "$2" ]]; then
+
+    echo 'Frequnency name missing. Use $3!'
+    exit 1
+
+fi
+
+rm -rf 'sets'
+
+sample -region 'region_conductor'
+
+resultsDir="results"
+timeDir='sets/region_conductor/0.0001'
+
+lines="x1 y1 y2 z1"
+
+for l in $lines; do
+
+    fileName="$resultsDir/data_eddyCurrentFoam_${1}_f${3}_line_${l}_m${2}.dat"
+
+    header="# ${l::-1}"
+    header="$header jRe_x jRe_y jRe_z"
+    header="$header jIm_x jIm_y jIm_z"
+    header="$header BRe_x BRe_y BRe_z"
+    header="$header BIm_x BIm_y BIm_z"
+    header="$header F_x F_y F_z"
+    header="$header VReGrad_x VReGrad_y VReGrad_z"
+    header="$header VImGrad_x VImGrad_y VImGrad_z"
+    header="$header s"
+    header="$header VRe"
+    header="$header VIm"
+    header="$header sigma"
+    header="$header mur"
+
+    echo "$header" > "$fileName"
+
+    paste "$timeDir/line_${l}_jRe_jIm_BRe_BIm_F_VReGrad_VImGrad.xy" \
+          "$timeDir/line_${l}_VRe_VIm_sigma_mur.xy" >> "$fileName"
+
+done

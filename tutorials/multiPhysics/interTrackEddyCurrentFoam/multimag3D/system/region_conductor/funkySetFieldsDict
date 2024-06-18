@@ -1,0 +1,48 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      funkySetFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+materialProperties
+(
+    "sigma_siliconLiquid=1.2e+6;"    // Conductivity of liquid silicon in [S/m]
+    "sigma_siliconSolid=8.3e+4;"     // Conductivity of solid silicon in [S/m]
+    "sigma_graphite=1.25e+5;"        // Conductivity of graphite in [S/m]
+    "sigma_stainlessSteel=1.43e+6;"  // Conductivity of stainless steel in [S/m]
+    "sigma_woodsMetal=1.0e+6;"       // Conductivity of woods metal in [S/m]
+    "sigma_copper=5.8e+7;"           // Conductivity of copper in [S/m]
+    "sigma_GaInSi=3.3e+6;"           // Conductivity of GaInSi in [S/m] at 25°C
+    "sigma_GaInSi_20=3.28891e+06;"   // Conductivity of GaInSi in [S/m] at 20°C
+);
+
+expressions
+(
+    sigma_reset
+    {
+        field         sigma;
+        variables     $materialProperties;
+        expression    "0";
+        keepPatches   true;
+    }
+    sigma_conductor
+    {
+        field         sigma;
+        variables     $materialProperties;
+        condition     "set(cellSet_material_liquidMetal)";
+        expression    "sigma_GaInSi_20";
+        keepPatches   true;
+    }
+);
+
+// ************************************************************************* //

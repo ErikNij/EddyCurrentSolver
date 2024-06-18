@@ -1,0 +1,12 @@
+
+trackedSurface.C
+trackedSurfaceBoundaryConditions.C
+trackedSurfaceDemandDrivenData.C
+trackedSurfaceForces.C
+trackedSurfacePointDisplacement.C
+trackedSurfaceWrite.C
+
+faSubMesh/faSubMesh.C
+faSubMesh/faSubMeshDemandDrivenData.C
+
+LIB = $(FOAM_USER_LIBBIN)/libtrackedSurface

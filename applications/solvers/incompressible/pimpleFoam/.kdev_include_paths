@@ -1,0 +1,13 @@
+../../../../.wm_project_dir/src/finiteVolume/lnInclude
+
+../../../../.wm_project_dir/src/transportModels
+../../../../.wm_project_dir/src/transportModels/incompressible/lnInclude
+
+../../../../.wm_project_dir/src/turbulenceModels/incompressible/turbulenceModel/lnInclude
+
+../../../../src/foamTools/lnInclude
+../../../../src/regionModel/lnInclude
+
+./pimpleApp
+
+./include

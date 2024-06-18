@@ -1,0 +1,15 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # run from this directory
+set -x
+
+
+wmake all freeSurface || exit 1
+wmake all freeSurface.new || exit 1
+
+wmake interFreeFoam || exit 1
+wmake interFreeFoam.new || exit 1
+
+
+wmake all trackedSurface || exit 1
+
+wmake interTrackFoam || exit 1

@@ -1,0 +1,82 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      funkySetFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+parameters
+(
+  "sigma_stainlessSteel=1.43e+6;"   // Conductivity of stainless steel in [S/m]
+  "sigma_woodsMetal=1.0e+6;"        // Conductivity of woods metal in [S/m]
+  "sigma_copper=5.8e+7;"            // Conductivity of copper in [S/m]
+
+  "coil_rms=12*2464.0;"             // Inductor current rms value in [A]
+  "coil_x0=0.10750;"                // Inductor center line x position in [m]
+  "coil_dz=0.00000;"                // Inductor loop z offset in [m]
+  "coil_z0=0.11750;"                // Inductor base z offset in [m]
+  "coil_ldx=0.01500;"               // Inductor loop cross section x width in [m]
+  "coil_ldz=0.23500;"               // Inductor loop cross section z width in [m]
+  "coil_area=coil_ldx*coil_ldz;"    // Inductor cross section area in [m^2]
+  "coil_amp=sqrt(2)*coil_rms;"      // Inductor current amplitude in [A]
+  "coil_den=coil_amp/coil_area;"    // Inductor current density in [A/m^2]
+);
+
+expressions
+(
+
+  sigma_reset
+  {
+    field         sigma;
+    expression    "0";
+  }
+
+//   sigma_stainlessSteel
+//   {
+//     field         sigma;
+//     variables     $parameters;
+//     expression    "sigma_stainlessSteel";
+//     condition     "set(cellSet_material_stainlessSteel)";
+//   }
+
+  sigma_woodsMetal
+  {
+    field         sigma;
+    variables     $parameters;
+    expression    "sigma_woodsMetal";
+    condition     "set(cellSet_material_woodsMetal)";
+  }
+
+//   sigma_copper
+//   {
+//     field         sigma;
+//     variables     $parameters;
+//     expression    "sigma_copper";
+//     condition     "set(cellSet_material_copper)";
+//   }
+
+  coil_reset
+  {
+    field         jsRe;
+    expression    "vector (0,0,0)";
+  }
+
+  coil
+  {
+    field         jsRe;
+    variables     $parameters;
+    expression    "vector (0,coil_den,0)";
+    condition     "set(cellSet_geometry_coil)";
+  }
+);
+
+// ************************************************************************* //

@@ -1,0 +1,19 @@
+# Wavefront OBJ file written 2024-06-10T14:58:17
+o geometry_boundary_bottomWall_edgeMesh
+
+# points : 4
+# lines  : 4
+
+# <points count="4">
+v 0.035 -0.059999999 0
+v -0.035 -0.059999999 0
+v 0.035 0.059999999 0
+v -0.035 0.059999999 0
+# </points>
+
+# <edges count="4">
+l 1 2
+l 3 1
+l 2 4
+l 4 3
+# </edges>

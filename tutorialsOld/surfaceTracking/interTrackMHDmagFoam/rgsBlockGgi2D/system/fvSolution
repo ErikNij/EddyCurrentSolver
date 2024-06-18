@@ -1,0 +1,90 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    A
+//     {
+//         solver            GaussSeidel; // GGI works, no convergence
+//         nSweeps           1;
+//         tolerance         1e-09;
+// //         relTol            1e-03;
+//         relTol            1e-06;
+// //         relTol            0;
+//         minIter           1;
+//         maxIter           1000;
+//     }
+//     {
+//         solver            GMRES; // GGI does NOT work
+//         tolerance         1e-09;
+// //         relTol            1e-03;
+//         relTol            1e-06;
+// //         relTol            0;
+//         minIter           1;
+//         maxIter           100;
+//         preconditioner
+//         {
+//             preconditioner GaussSeidel;
+//             nSweeps        5;
+//         }
+//         nDirections       6;
+//     }
+    {
+        solver            BiCGStab; // GGI does NOT work
+        tolerance         1e-09;
+//         relTol            1e-03;
+        relTol            1e-06;
+//         relTol            0;
+        minIter           1;
+        maxIter           100;
+        preconditioner    none;
+//         preconditioner
+//         {
+//             preconditioner GaussSeidel;
+//             nSweeps        5;
+//         }
+    }
+//     {
+//         solver            AMG; // GGI does NOT work
+//         tolerance         1e-09;
+//         relTol            0;
+//         minIter           1;
+//         maxIter           1000;
+//         smoother          GaussSeidel;    // GaussSeidel, ILU
+//         cycle             V-cycle;        // V-cycle, F-cycle, W-cycle
+//         nPreSweeps        0;
+//         nPostSweeps       2;
+//         nMaxLevels        5;
+//         scale             5;
+//         coarseningType    AAMG;           // AAMG
+//         groupSize         6;
+//         minCoarseEqns     5;
+//         norm              twoNorm;        // componentNorm, maxNorm, twoNorm
+//     }
+}
+
+Magnetic
+{
+    update
+    {
+        active           on;
+        outputCycle      2147483647;
+        timeStepCycle    10;
+        timeCycle        1e+100;
+    }
+}
+
+// ************************************************************************* //

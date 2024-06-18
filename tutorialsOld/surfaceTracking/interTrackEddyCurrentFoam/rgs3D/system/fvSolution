@@ -1,0 +1,52 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    AV
+    {
+        tolerance                1e-4;
+        relTol                   0.5;
+
+        maxIter             100;
+    }
+
+    A
+    {
+        solver                   BiCGStab;
+
+        tolerance                1e-04;
+        relTol                   0;
+
+        minIter                  0;
+        maxIter                  300;
+
+        preconditioner           Cholesky;
+    }
+}
+
+Magnetic
+{
+    update
+    {
+        active           on;
+        outputCycle      2147483647;
+        timeStepCycle    2147483647;
+        timeCycle        0.05;
+    }
+}
+
+// ************************************************************************* //

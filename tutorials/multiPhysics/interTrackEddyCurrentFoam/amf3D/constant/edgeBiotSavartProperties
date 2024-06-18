@@ -1,0 +1,239 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      edgeBiotSavartProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+nNonOrthogonalCorrectors    10;
+
+inductors
+{
+    coil0
+    {
+        file       "coil0.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil1
+    {
+        file       "coil1.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil2
+    {
+        file       "coil2.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil3
+    {
+        file       "coil3.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil4
+    {
+        file       "coil4.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil5
+    {
+        file       "coil5.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil6
+    {
+        file       "coil6.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil7
+    {
+        file       "coil7.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil8
+    {
+        file       "coil8.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil9
+    {
+        file       "coil9.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil10
+    {
+        file       "coil10.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil11
+    {
+        file       "coil11.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil12
+    {
+        file       "coil12.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil13
+    {
+        file       "coil13.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil14
+    {
+        file       "coil14.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil15
+    {
+        file       "coil15.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil16
+    {
+        file       "coil16.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil17
+    {
+        file       "coil17.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil18
+    {
+        file       "coil18.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil19
+    {
+        file       "coil19.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil20
+    {
+        file       "coil20.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil21
+    {
+        file       "coil21.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil22
+    {
+        file       "coil22.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+    
+    coil23
+    {
+        file       "coil23.eMesh";
+        reverse    false;
+        current    161.640625;
+        filaments  1;
+        phase      0.0;
+    }
+}
+
+// ************************************************************************* //
+

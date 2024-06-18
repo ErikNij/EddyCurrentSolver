@@ -1,0 +1,454 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      surfaceFeatureExtractDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+geometry_fluid.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_fluid_dynamic.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_fluid_static.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_wafer.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_wafer_back_and_above.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_substrate.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_frame.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_frame_dynamic.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_frame_static.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_free_no_top.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_free.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_free_dynamic.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_free_static.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_coil0.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_coil1.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_coil2.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_boundary_terminal0.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_boundary_terminal1.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_boundary_terminal2.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_boundary_trackedSurface.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_boundary_fixedWall.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_boundary_movingWall.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+geometry_boundary_fixedMesh.stl
+{
+    // How to obtain raw features (extractFromFile || extractFromSurface)
+    extractionMethod extractFromSurface;
+
+    extractFromSurfaceCoeffs
+    {
+        // Mark edges whose adjacent surface normals are at an angle less
+        // than includedAngle as features
+        // - 0 : selects no edges
+        // - 180: selects all edges
+        includedAngle 90;
+    }
+
+    // Write options
+    // Write features to obj format for postprocessing
+    writeObj yes;
+}
+
+// ************************************************************************* //

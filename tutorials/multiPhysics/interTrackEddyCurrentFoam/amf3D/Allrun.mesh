@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# Remove old polyMesh
+rm -rf '0/polyMesh'
+rm -rf 'constant/polyMesh'
+
+# Create blockMeshDict
+./setup/blockMeshDict.py || exit 1
+
+# Run blockMesh
+blockMesh || exit 1
+
+# Mirror mesh in x- and y- direction
+directions="x y"
+for d in $directions; do
+
+    cp "system/mirrorMeshDict.$d" \
+        'system/mirrorMeshDict'
+
+    mirrorMesh || exit 1
+
+done
+
+# Renumber mesh
+renumberMesh -overwrite || exit 1
+
+# Move new polyMesh files to storage folder
+mesh0Folder='0/polyMesh'
+meshFolder='constant/polyMesh'
+[[ ! -e "$meshFolder" ]] && mkdir "$meshFolder"
+if [[ -e "$mesh0Folder" ]]; then
+
+    mv "$mesh0Folder/blockMeshDict" \
+       "$mesh0Folder/boundary" \
+       "$mesh0Folder/faces" \
+       "$mesh0Folder/neighbour" \
+       "$mesh0Folder/owner" \
+       "$mesh0Folder/points" \
+       "$meshFolder/" \
+        > /dev/null 2>&1
+
+fi
+
+meshBakFolder='constant/polyMesh.org'
+[[ ! -e "$meshBakFolder" ]] && mkdir "$meshBakFolder"
+mv "$meshFolder/blockMeshDict" \
+   "$meshFolder/boundary" \
+   "$meshFolder/faces" \
+   "$meshFolder/neighbour" \
+   "$meshFolder/owner" \
+   "$meshFolder/points" \
+   "$meshBakFolder/" \
+    > /dev/null 2>&1
+
+# Remove polyMesh
+rm -rf "$meshFolder"
+rm -rf "$mesh0Folder"
+if [[ -e '0' ]]; then
+    [[ -z "$(ls -A '0' 2> /dev/null)" ]] && rmdir '0'
+fi
+
+# Copy mesh to constant
+cp -r "$meshBakFolder" "$meshFolder"

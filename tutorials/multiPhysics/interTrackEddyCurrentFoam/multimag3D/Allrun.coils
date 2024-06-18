@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Remove old featureEdgeMesh
+rm -rf constant/featureEdgeMesh
+
+# Create coils
+./setup/coils.py || exit 1
+
+for eMeshFile in $(ls -1 "constant/featureEdgeMesh/"*".eMesh"); do
+
+    surfaceFeatureConvert "${eMeshFile#'constant/'}" "${eMeshFile%'.eMesh'}.vtk" || exit 1
+
+done

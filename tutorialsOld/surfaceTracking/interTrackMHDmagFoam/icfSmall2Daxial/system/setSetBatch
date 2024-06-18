@@ -1,0 +1,61 @@
+### Geometric cell sets
+
+cellSet cellSet_geometry_fluidDynamic     new boxToCell ( 0.00000 -1.00000  0.00000) ( 0.08500  1.00000  0.23500)
+cellSet cellSet_geometry_fluid            new setToCell cellSet_geometry_fluidDynamic
+
+cellSet cellSet_geometry_crucibleDynamic  new boxToCell ( 0.08500 -1.00000  0.00000) ( 0.08600  1.00000  0.38300)
+cellSet cellSet_geometry_crucible         new setToCell cellSet_geometry_crucibleDynamic
+
+cellSet cellSet_geometry_crucibleStatic   new boxToCell ( 0.00000 -1.00000 -0.00100) ( 0.08600  1.00000  0.00000)
+cellSet cellSet_geometry_crucibleStatic   add boxToCell ( 0.08500 -1.00000  0.38300) ( 0.08600  1.00000  0.38300)
+cellSet cellSet_geometry_crucible         add setToCell cellSet_geometry_crucibleStatic
+
+cellSet cellSet_geometry_freeSpaceDynamic new boxToCell ( 0.00000 -1.00000  0.00000) ( 0.08500  1.00000  0.38300)
+cellSet cellSet_geometry_freeSpaceDynamic delete setToCell cellSet_geometry_fluidDynamic
+cellSet cellSet_geometry_freeSpaceStatic  new setToCell cellSet_geometry_fluidDynamic
+cellSet cellSet_geometry_freeSpaceStatic  add setToCell cellSet_geometry_crucibleDynamic
+cellSet cellSet_geometry_freeSpaceStatic  add setToCell cellSet_geometry_freeSpaceDynamic
+cellSet cellSet_geometry_freeSpaceStatic  invert
+cellSet cellSet_geometry_freeSpace        new setToCell cellSet_geometry_freeSpaceDynamic
+cellSet cellSet_geometry_freeSpace        add setToCell cellSet_geometry_freeSpaceStatic
+
+### Material cell sets
+
+cellSet cellSet_material_woodsMetal       new setToCell cellSet_geometry_fluid
+
+cellSet cellSet_material_stainlessSteel   new setToCell cellSet_geometry_crucible
+
+cellSet cellSet_material_air              new setToCell cellSet_geometry_freeSpace
+
+### Region cell sets
+
+cellSet cellSet_region_fluid              new setToCell cellSet_geometry_fluidDynamic
+
+cellSet cellSet_region_dynamic            new setToCell cellSet_geometry_crucibleDynamic
+cellSet cellSet_region_dynamic            add setToCell cellSet_geometry_freeSpaceDynamic
+
+cellSet cellSet_region_static             new setToCell cellSet_geometry_crucibleStatic
+cellSet cellSet_region_static             add setToCell cellSet_geometry_freeSpaceStatic
+
+### Outer face sets
+# Factor cos(5*) = 0.9961946980917455
+
+faceSet faceSet_front                     new boxToFace ( 0.00000 -1.00000 -1.00000) ( 1.00000 -0.00001  1.00000)
+faceSet faceSet_back                      new boxToFace ( 0.00000  0.00001 -1.00000) ( 1.00000  1.00000  1.00000)
+faceSet faceSet_frontAndBack              new setToFace faceSet_front
+faceSet faceSet_frontAndBack              add setToFace faceSet_back
+
+faceSet faceSet_infinity                  new boxToFace ( 0.29800 -1.00000 -1.00000) ( 0.30001  1.00000  1.00000)
+faceSet faceSet_infinity                  add boxToFace ( 0.00000 -1.00000  0.58299) ( 1.00000  1.00000  0.58301)
+faceSet faceSet_infinity                  add boxToFace ( 0.00000 -1.00000 -0.20001) ( 1.00000  1.00000 -0.19999)
+
+### Inner face sets
+
+faceSet faceSet_fixedMesh                 new boxToFace ( 0.00000 -1.00000  0.38299) ( 0.08600  1.00000  0.38301)
+faceSet faceSet_fixedMesh                 add boxToFace ( 0.08560 -1.00000  0.00000) ( 0.08601  1.00000  0.38300)
+faceSet faceSet_fixedMesh                 add boxToFace ( 0.08500 -1.00000 -0.00001) ( 0.08600  1.00000  0.00001)
+
+faceSet faceSet_trackedSurface            new boxToFace ( 0.00000 -1.00000  0.23499) ( 0.08500  1.00000  0.23501)
+
+faceSet faceSet_fixedWallBottom           new boxToFace ( 0.00000 -1.00000 -0.00001) ( 0.08500  1.00000  0.00001)
+faceSet faceSet_fixedWallSide             new boxToFace ( 0.08460 -1.00000  0.00000) ( 0.08501  1.00000  0.23500)

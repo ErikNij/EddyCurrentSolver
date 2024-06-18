@@ -1,0 +1,69 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      nut;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -1 0 0 0 0];
+
+internalField   uniform 0;
+
+boundaryField
+{
+    axis
+    {
+        type            empty;
+    }
+    trackedSurface
+    {
+        type            slip;
+//         type            calculated;
+//         value           uniform 0;
+    }
+    fixedWallBottom
+    {
+        type            nutWallFunction;
+//         type            nutUWallFunction;
+//         type            nutkWallFunction;
+//         type            nutkRoughWallFunction;
+//         type            nutURoughWallFunction;
+//         type            nutUSpaldingWallFunction;
+        value           $internalField;
+    }
+    fixedWallSide
+    {
+        type            nutWallFunction;
+//         type            nutUWallFunction;
+//         type            nutkWallFunction;
+//         type            nutkRoughWallFunction;
+//         type            nutURoughWallFunction;
+//         type            nutUSpaldingWallFunction;
+        value           $internalField;
+    }
+    front
+    {
+        type            wedge;
+    }
+    back
+    {
+        type            wedge;
+    }
+    "procBoundary.*"
+    {
+        type            processor;
+        value           uniform 0;
+    }
+}
+
+// ************************************************************************* //
+

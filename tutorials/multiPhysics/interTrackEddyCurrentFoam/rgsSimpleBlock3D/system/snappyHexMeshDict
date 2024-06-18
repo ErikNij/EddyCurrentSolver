@@ -1,0 +1,128 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+inside      (0.0 0.0 0.1);
+
+finer       2;
+fine        1;
+
+// ************************************************************************* //
+
+// Flags for optional output
+// 0 : only write final meshes
+// 1 : write intermediate meshes
+// 2 : write volScalarField with cellLevel for postprocessing
+// 4 : write current intersections as .obj files
+debug 0;
+
+// Merge tolerance. Is fraction of overall bounding box of initial mesh.
+// Note: the write tolerance needs to be higher than this.
+mergeTolerance 1e-8;
+
+// Meshing steps
+castellatedMesh true;
+snap            false;
+addLayers       false;
+
+geometry
+{
+    geometry_body_conductor.stl
+    {
+        type    triSurfaceMesh;
+        name    conductor;
+    }
+
+    geometry_body_conductor0.stl
+    {
+        type    triSurfaceMesh;
+        name    conductor0;
+    }
+
+    geometry_body_conductor1.stl
+    {
+        type    triSurfaceMesh;
+        name    conductor1;
+    }
+
+    conductor_layer
+    {
+        type    searchableBox;
+        min     (-0.06500 -0.11000 -0.03000);
+        max     ( 0.06500  0.11000  0.05000);
+    }
+};
+
+castellatedMeshControls
+{
+
+    maxLocalCells 1000000;
+    maxGlobalCells 20000000;
+    minRefinementCells 0;
+    nCellsBetweenLevels 2;
+
+    features
+    (
+    );
+
+    refinementSurfaces
+    {
+        conductor0
+        {
+            level ($finer $finer);
+
+            faceZone conductor0;
+            cellZone conductor0;
+
+            zoneInside yes;
+        }
+
+        conductor1
+        {
+            level ($finer $finer);
+
+            faceZone conductor1;
+            cellZone conductor1;
+
+            zoneInside yes;
+        }
+    }
+
+    resolveFeatureAngle 30;
+
+    refinementRegions
+    {
+        conductor
+        {
+            mode inside;
+            levels ((1e-15 $fine));
+        }
+
+        conductor_layer
+        {
+            mode inside;
+            levels ((1e-15 $fine));
+        }
+    }
+
+    locationInMesh $inside;
+    allowFreeStandingZoneFaces no;
+}
+
+#include "snappyHexMeshDict.include.meshQualityControls"
+#include "snappyHexMeshDict.include.snapControls"
+#include "snappyHexMeshDict.include.addLayersControls"
+
+// ************************************************************************* //

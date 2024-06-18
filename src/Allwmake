@@ -1,0 +1,10 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # run from this directory
+set -x
+
+
+wmakeLnInclude foamTools || exit 1
+wmakeLnInclude regionModel || exit 1
+
+wmake libso foamTools || exit 1
+wmake libso regionModel || exit 1

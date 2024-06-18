@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# NOTE: To be used only with OpenFOAM 2.2.0 +
+
+# Check if we are running OpenFOAM
+if [[ ! -d "$FOAM_SRC/OpenFOAM" ]]; then
+
+    echo "Please make sure that the environment for OpenFOAM is set correctly."
+    echo "In order to create this mesh with snappyHexMesh, OpenFOAM 2.2.0 or newer is necessary."
+    echo "Maybe you are using foam-extend?"
+    exit
+fi
+
+# Remove old polyMesh
+rm -rf 'constant/polyMesh'
+
+# Get blockMeshDict.py script from storage folder
+mkdir 'constant/polyMesh'
+cp -r 'constant/polyMesh.org/blockMeshDict.py' 'constant/polyMesh/'
+
+# Create blockMeshDict
+./constant/polyMesh/blockMeshDict.py
+
+# Run blockMesh
+blockMesh || exit 1
+
+# Renumber mesh
+renumberMesh -overwrite || exit 1
+
+# Extract surface features
+surfaceFeatureExtract || exit 1
+
+# Run snappyHexMesh (needs OpenFOAM 2.2.0 + for featureSnapping)
+snappyHexMesh -overwrite || exit 1
+
+# Remove leftovers from snappyHexMesh
+rm -rf 'constant/cellLevel' \
+        'constant/polyMesh/cellLevel'* \
+        'constant/pointLevel' \
+        'constant/polyMesh/pointLevel'* \
+        'constant/polyMesh/refinementHistory'* \
+        'constant/polyMesh/surfaceIndex'* \
+        'constant/polyMesh/level0Edge' \
+        > /dev/null 2>&1
+
+# Remove empty patches
+createPatch -overwrite || exit 1
+
+# Move new polyMesh files to storage folder
+mv 'constant/polyMesh/boundary' \
+   'constant/polyMesh/faces' \
+   'constant/polyMesh/neighbour' \
+   'constant/polyMesh/owner' \
+   'constant/polyMesh/points' \
+   'constant/polyMesh.org/'
+
+# Remove old polyMesh
+rm -rf 'constant/polyMesh'
+
+# Copy mesh to constant
+cp -r "constant/polyMesh.org" "constant/polyMesh"

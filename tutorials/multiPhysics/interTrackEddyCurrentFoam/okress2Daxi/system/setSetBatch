@@ -1,0 +1,51 @@
+### Geometry
+
+# All
+
+cellSet  cellSet_geometry_all             new    sphereToCell      (0.0 0.0 0.0) 1
+
+# Conductor
+
+cellSet  cellSet_geometry_conductor       new    sphereToCell      (0.0 0.0 0.0) 0.0125
+
+# Background
+
+cellSet  cellSet_geometry_background      new    setToCell      cellSet_geometry_all
+cellSet  cellSet_geometry_background      delete setToCell      cellSet_geometry_conductor
+cellSet  cellSet_geometry_background_old  remove
+
+
+
+### Materials
+
+cellSet cellSet_material_conductor        new    setToCell      cellSet_geometry_conductor
+
+cellSet cellSet_material_air              new    setToCell      cellSet_geometry_background
+
+
+
+### Regions
+
+cellSet cellSet_region_conductor          new    setToCell      cellSet_geometry_conductor
+
+cellSet cellSet_region_space              new    setToCell      cellSet_geometry_background
+
+cellSet cellSet_region_fluid              new    setToCell      cellSet_geometry_conductor
+
+cellSet cellSet_region_buffer             new    setToCell      cellSet_geometry_background
+
+faceSet faceSet_regions                   new    cellToFace     cellSet_region_conductor all
+faceSet faceSet_regions                   delete cellToFace     cellSet_region_conductor both
+faceSet faceSet_regions                   add    cellToFace     cellSet_region_space all
+faceSet faceSet_regions                   delete cellToFace     cellSet_region_space both
+faceSet faceSet_regions                   add    cellToFace     cellSet_region_fluid all
+faceSet faceSet_regions                   delete cellToFace     cellSet_region_fluid both
+faceSet faceSet_regions                   add    cellToFace     cellSet_region_buffer all
+faceSet faceSet_regions                   delete cellToFace     cellSet_region_buffer both
+faceSet faceSet_regions_old               remove
+
+
+
+### End
+
+quit

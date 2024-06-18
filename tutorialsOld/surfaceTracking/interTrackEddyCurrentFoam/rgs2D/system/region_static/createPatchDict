@@ -1,0 +1,46 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      createPatchDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+matchTolerance           1e-6;
+
+pointSync                true;
+
+patchInfo
+(
+    {
+        name             movingWall;
+        constructFrom    set;
+        set              faceSet_movingWall;
+
+        dictionary
+        {
+            type         wall;
+        }
+    }
+
+    {
+        name             fixedMesh;
+        constructFrom    set;
+        set              faceSet_fixedMesh;
+
+        dictionary
+        {
+            type         patch;
+        }
+    }
+);
+
+// ************************************************************************* //

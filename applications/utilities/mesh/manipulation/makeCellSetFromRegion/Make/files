@@ -1,0 +1,3 @@
+makeCellSetFromRegion.C
+
+EXE = $(FOAM_USER_APPBIN)/makeCellSetFromRegion

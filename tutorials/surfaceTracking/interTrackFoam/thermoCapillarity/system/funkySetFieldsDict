@@ -1,0 +1,34 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      funkySetFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+vars
+(
+//     "ddxc=25.4e+3/1;" // mod for test case
+);
+
+expressions
+(
+//     conc
+//     {
+//         field         c;
+//         variables     $vars;
+//         expression    "ddxc*(pos().y-0.004)";
+//         keepPatches   true;
+//     }
+);
+
+// ************************************************************************* //
+

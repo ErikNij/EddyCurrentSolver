@@ -1,0 +1,11 @@
+#!/bin/sh
+
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+application="interTrackFoam"
+
+runApplication makeFaMesh
+runApplication makeFaSubMesh && cp 'system/decomposeParDict.region' 'system/region0_faSubMesh/decomposeParDict'
+#runApplication $application
+
+#./Allclean && ./Allrun && decomposePar -cellDist && makeRegionCellDecomposition -region region0_faSubMesh && decomposePar -region region0_faSubMesh && decomposeRegionAddressing -region region0_faSubMesh

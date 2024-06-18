@@ -1,0 +1,393 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+geo_dy      0.00125;
+
+// ************************************************************************* //
+
+// Flags for optional output
+// 0 : only write final meshes
+// 1 : write intermediate meshes
+// 2 : write volScalarField with cellLevel for postprocessing
+// 4 : write current intersections as .obj files
+debug 0;
+
+// Merge tolerance. Is fraction of overall bounding box of initial mesh.
+// Note: the write tolerance needs to be higher than this.
+mergeTolerance 1e-6;
+
+// Meshing steps
+castellatedMesh true;
+snap            false;
+addLayers       false;
+
+geometry
+{
+    fluid_dynamic
+    {
+        type    searchableBox;
+        min     (-0.03500 -1.00000  0.00000);
+        max     ( 0.03500  1.00000  0.02000);
+    }
+
+    fluid_static
+    {
+        type    searchableBox;
+        min     (-0.03500 -1.00000 -0.00040);
+        max     ( 0.04500  1.00000  0.00000);
+    }
+
+    casting_frame_left
+    {
+        type    searchableBox;
+        min     (-0.04500 -1.00000  0.00000);
+        max     (-0.03500  1.00000  0.09000);
+    }
+
+    casting_frame_right
+    {
+        type    searchableBox;
+        min     ( 0.03500 -1.00000  0.00000);
+        max     ( 0.04500  1.00000  0.09000);
+    }
+
+    substrate
+    {
+        type    searchableBox;
+        min     (-0.07800 -1.00000 -0.00490);
+        max     ( 0.07800  1.00000 -0.00090);
+    }
+
+    wafer
+    {
+        type    searchableBox;
+        min     (-0.03500 -1.00000 -0.00090);
+        max     ( 0.07800  1.00000 -0.00040);
+    }
+
+    free_space_dynamic
+    {
+        type    searchableBox;
+        min     (-0.03500 -1.00000  0.02000);
+        max     ( 0.03500  1.00000  0.05000);
+    }
+
+    free_space_static
+    {
+        type    searchableBox;
+        min     (-0.03500 -1.00000  0.05000);
+        max     ( 0.03500  1.00000  0.09000);
+    }
+
+    coil_area_left
+    {
+        type    searchableBox;
+        min     (-0.08500 -1.00000 -0.00500);
+        max     (-0.04500  1.00000  0.05000);
+    }
+
+    coil_area_right
+    {
+        type    searchableBox;
+        min     ( 0.04500 -1.00000 -0.00500);
+        max     ( 0.08500  1.00000  0.05000);
+    }
+};
+
+castellatedMeshControls
+{
+
+    maxLocalCells 100000;
+    maxGlobalCells 2000000;
+    minRefinementCells 0;
+    nCellsBetweenLevels 1;
+
+    features
+    (
+    );
+
+    refinementSurfaces
+    {
+        fluid_dynamic
+        {
+            level (4 4);
+            faceZone fluidDynamic;
+            cellZone fluidDynamic;
+            zoneInside yes;
+        }
+
+        casting_frame_left
+        {
+            level (4 4);
+            faceZone castingFrameDynamic;
+            cellZone castingFrameDynamic;
+            zoneInside yes;
+        }
+
+        casting_frame_right
+        {
+            level (4 4);
+            faceZone castingFrameDynamic;
+            cellZone castingFrameDynamic;
+            zoneInside yes;
+        }
+
+        substrate
+        {
+            level (4 4);
+            faceZone substrate;
+            cellZone substrate;
+            zoneInside yes;
+        }
+
+        free_space_dynamic
+        {
+            level (2 2);
+            faceZone freeSpaceDynamic;
+            cellZone freeSpaceDynamic;
+            zoneInside yes;
+        }
+
+        free_space_static
+        {
+            level (1 1);
+            faceZone freeSpaceStatic;
+            cellZone freeSpaceStatic;
+            zoneInside yes;
+        }
+    }
+
+    resolveFeatureAngle 30;
+
+    refinementRegions
+    {
+        fluid_dynamic
+        {
+            mode inside;
+            levels ((1e-15 4));
+        }
+
+        fluid_static
+        {
+            mode inside;
+            levels ((1e-15 4));
+        }
+
+        casting_frame_left
+        {
+            mode inside;
+            levels ((1e-15 3));
+        }
+
+        casting_frame_right
+        {
+            mode inside;
+            levels ((1e-15 3));
+        }
+
+        substrate
+        {
+            mode inside;
+            levels ((1e-15 3));
+        }
+
+        wafer
+        {
+            mode inside;
+            levels ((1e-15 3));
+        }
+
+        free_space_dynamic
+        {
+            mode inside;
+            levels ((1e-15 2));
+        }
+
+        free_space_static
+        {
+            mode inside;
+            levels ((1e-15 1));
+        }
+
+        coil_area_left
+        {
+            mode inside;
+            levels ((1e-15 2));
+        }
+
+        coil_area_right
+        {
+            mode inside;
+            levels ((1e-15 2));
+        }
+    }
+
+    locationInMesh (0.0 $geo_dy 0.01);
+    allowFreeStandingZoneFaces no;
+}
+
+meshQualityControls
+{
+    //- Maximum non-orthogonality allowed. Set to 180 to disable.
+    maxNonOrtho 65;
+
+    //- Max skewness allowed. Set to <0 to disable.
+    maxBoundarySkewness 20;
+    maxInternalSkewness 4;
+
+    //- Max concaveness allowed. Is angle (in degrees) below which concavity
+    //  is allowed. 0 is straight face, <0 would be convex face.
+    //  Set to 180 to disable.
+    maxConcave 80;
+
+    //- Minimum pyramid volume. Is absolute volume of cell pyramid.
+    //  Set to very negative number (e.g. -1E30) to disable.
+    minVol 0;
+
+    //- Minimum quality of the tet formed by the face-centre
+    //  and variable base point minimum decomposition triangles and
+    //  the cell centre.  Set to very negative number (e.g. -1E30) to
+    //  disable.
+    //     <0 = inside out tet,
+    //      0 = flat tet
+    //      1 = regular tet
+    minTetQuality 1e-30;
+
+    //- Minimum face area. Set to <0 to disable.
+    minArea -1;
+
+    //- Minimum face twist. Set to <-1 to disable. dot product of face normal
+    //- and face centre triangles normal
+    minTwist 0.02;
+
+    //- minimum normalised cell determinant
+    //- 1 = hex, <= 0 = folded or flattened illegal cell
+    minDeterminant 0.001;
+
+    //- minFaceWeight (0 -> 0.5)
+    minFaceWeight 0.02;
+
+    //- minVolRatio (0 -> 1)
+    minVolRatio 0.01;
+
+    //must be >0 for Fluent compatibility
+    minTriangleTwist -1;
+
+
+    // Advanced
+
+    //- Number of error distribution iterations
+    nSmoothScale 4;
+    //- amount to scale back displacement at error points
+    errorReduction 0.75;
+}
+
+snapControls
+{
+    //- Number of patch smoothing iterations before finding correspondence
+    //  to surface
+    nSmoothPatch 8;
+
+    //- Relative distance for points to be attracted by surface feature point
+    //  or edge. True distance is this factor times local
+    //  maximum edge length.
+    tolerance 1.0;
+
+    //- Number of mesh displacement relaxation iterations.
+    nSolveIter 30;
+
+    //- Maximum number of snapping relaxation iterations. Should stop
+    //  before upon reaching a correct mesh.
+    nRelaxIter 5;
+
+    //- Highly experimental and wip: number of feature edge snapping
+    //  iterations. Leave out altogether to disable.
+    //  Of limited use in this case since faceZone faces not handled.
+    nFeatureSnapIter 10;
+}
+
+addLayersControls
+{
+    relativeSizes true;
+
+    // Per final patch (so not geometry!) the layer information
+    layers
+    {
+        top
+        {
+            nSurfaceLayers 1;
+        }
+    }
+
+    // Expansion factor for layer mesh
+    expansionRatio 1.0;
+
+    // Wanted thickness of final added cell layer. If multiple layers
+    // is the thickness of the layer furthest away from the wall.
+    // Relative to undistorted size of cell outside layer.
+    finalLayerThickness 0.3;
+
+    // Minimum thickness of cell layer. If for any reason layer
+    // cannot be above minThickness do not add layer.
+    // Relative to undistorted size of cell outside layer.
+    minThickness 0.1;
+
+    // If points get not extruded do nGrow layers of connected faces that are
+    // also not grown. This helps convergence of the layer addition process
+    // close to features.
+    // Note: changed(corrected) w.r.t 17x! (didn't do anything in 17x)
+    nGrow 1;
+
+    // Advanced settings
+
+    // When not to extrude surface. 0 is flat surface, 90 is when two faces
+    // are perpendicular
+    featureAngle 60;
+
+    // Maximum number of snapping relaxation iterations. Should stop
+    // before upon reaching a correct mesh.
+    nRelaxIter 5;
+
+    // Number of smoothing iterations of surface normals
+    nSmoothSurfaceNormals 1;
+
+    // Number of smoothing iterations of interior mesh movement direction
+    nSmoothNormals 3;
+
+    // Smooth layer thickness over surface patches
+    nSmoothThickness 10;
+
+    // Stop layer growth on highly warped cells
+    maxFaceThicknessRatio 0.5;
+
+    // Reduce layer growth where ratio thickness to medial
+    // distance is large
+    maxThicknessToMedialRatio 1;
+
+    // Angle used to pick up medial axis points
+    // Note: changed(corrected) w.r.t 17x! 90 degrees corresponds to 130 in 17x.
+    minMedianAxisAngle 90;
+
+    // Create buffer region for new layer terminations
+    nBufferCellsNoExtrude 0;
+
+    // Overall max number of layer addition iterations. The mesher will exit
+    // if it reaches this number of iterations; possibly with an illegal
+    // mesh.
+    nLayerIter 50;
+}
+
+// ************************************************************************* //

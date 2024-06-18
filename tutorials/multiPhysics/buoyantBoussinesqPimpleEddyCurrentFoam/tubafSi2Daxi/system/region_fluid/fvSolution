@@ -1,0 +1,79 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    pFinal
+//     {
+//         solver                GAMG;
+//         tolerance             1e-08;
+//         relTol                0;
+//
+//         smoother              GaussSeidel;
+//         nPreSweeps            0;
+//         nPostSweeps           2;
+//         cacheAgglomeration    on;
+//         agglomerator          faceAreaPair;
+//         nCellsInCoarsestLevel 80;
+//         mergeLevels           1;
+//     }
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-08;
+        relTol          0;
+    }
+
+    p { $pFinal; relTol 1e-2; }
+
+    "(UFinal|epsilon|omega|k|nuTilda)"
+    {
+        solver                   PBiCG;
+        tolerance                1e-07;
+        relTol                   0;
+        preconditioner           DILU;
+    }
+
+    U { $UFinal; }
+//     U { $UFinal; relTol 1e-02; }
+}
+
+PIMPLE
+{
+    nOuterCorrectors            3;
+    nCorrectors                 2;
+    nNonOrthogonalCorrectors    2;
+    pRefPoint (0.04 0.0 0.04);
+    pRefValue 0;
+
+    momentumPredictor yes;
+
+    residualControl
+    {
+        U
+        {
+                tolerance  1e-05;
+                relTol     1e-02;
+        }
+        p
+        {
+                tolerance  1e-05;
+                relTol     1e-02;
+        }
+     }
+}
+
+// ************************************************************************* //

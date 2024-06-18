@@ -1,0 +1,3 @@
+meshFluxesObject.C
+
+LIB = $(FOAM_USER_LIBBIN)/libmeshFluxes

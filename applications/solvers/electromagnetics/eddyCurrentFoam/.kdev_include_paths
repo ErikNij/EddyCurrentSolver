@@ -1,0 +1,13 @@
+../../../../.wm_project_dir/src/finiteVolume/lnInclude
+../../../../.wm_project_dir/src/VectorN/lnInclude
+
+../../../../src/foamTools/lnInclude
+../../../../src/regionModel/lnInclude
+
+./electricPotential/electricPotentialGrad
+./electricPotential/electricPotentialLaplacian
+
+./edgeBiotSavart
+./eddyCurrentApp
+
+./include

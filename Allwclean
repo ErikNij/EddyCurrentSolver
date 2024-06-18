@@ -1,0 +1,5 @@
+#!/bin/bash
+cd ${0%/*} || exit 1    # run from this directory
+
+if [ -e 'src/Allwclean' ]; then src/Allwclean || exit 1; fi
+if [ -e 'applications/Allwclean' ]; then applications/Allwclean || exit 1; fi

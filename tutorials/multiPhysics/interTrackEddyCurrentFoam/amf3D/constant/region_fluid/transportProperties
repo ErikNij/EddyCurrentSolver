@@ -1,0 +1,42 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      transportProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+phase1
+{
+    transportModel    Newtonian;
+//     nu                nu  [ 0 2 -1 0 0 0 0 ] 3.3858268e-7; // SiLiquid
+//     nu                nu  [ 0 2 -1 0 0 0 0 ] 3.34e-7; // GaInSi at 25°C
+    nu                nu  [ 0 2 -1 0 0 0 0 ] 3.43629e-07; // GaInSi at 20°C
+//     nu                nu  [ 0 2 -1 0 0 0 0 ] 4.4680851e-7; // Woods metal
+//     rho               rho [ 1 -3  0 0 0 0 0 ] 2580;        // SiLiquid
+//     rho               rho [ 1 -3  0 0 0 0 0 ] 6350;        // GaInSi at 25°C
+    rho               rho [ 1 -3  0 0 0 0 0 ] 6352.55;        // GaInSi at 20°C
+//     rho               rho [ 1 -3  0 0 0 0 0 ] 9400;        // Woods metal
+}
+
+phase2
+{
+    transportModel    Newtonian;
+    nu                nu  [ 0 2 -1 0 0 0 0 ] 0;
+    rho               rho [ 1 -3 0 0 0 0 0 ] 0;
+}
+
+// sigma                 sigma [ 1 0 -2 0 0 0 0 ] 0.73312; // SiLiquid
+sigma                 sigma [ 1 0 -2 0 0 0 0 ] 0.58684; // GaInSi at 25°C
+// sigma                 sigma [ 1 0 -2 0 0 0 0 ] 0.4;     // Woods metal???
+
+// ************************************************************************* //
+

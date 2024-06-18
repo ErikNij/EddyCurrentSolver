@@ -1,0 +1,8 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # run from this directory
+set -x
+
+wclean all solvers || exit 1
+wclean all utilities || exit 1
+
+wcleanLnIncludeAll . || exit 1

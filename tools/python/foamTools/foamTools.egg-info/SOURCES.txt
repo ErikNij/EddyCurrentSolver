@@ -1,0 +1,5 @@
+setup.py
+foamTools.egg-info/PKG-INFO
+foamTools.egg-info/SOURCES.txt
+foamTools.egg-info/dependency_links.txt
+foamTools.egg-info/top_level.txt

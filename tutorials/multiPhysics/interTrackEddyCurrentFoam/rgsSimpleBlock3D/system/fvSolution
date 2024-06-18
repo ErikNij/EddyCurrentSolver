@@ -1,0 +1,92 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    "(Ax|Ay|Az)"
+    {
+        solver                   BiCGStab;
+
+        tolerance                1e-05;
+        relTol                   0.1;
+
+        minIter                  0;
+        maxIter                  300;
+
+        preconditioner           Cholesky;
+    }
+//     {
+//         solver          AMG;
+//         cycle           V-cycle;
+//         coarseningType  AAMG;
+//         norm            componentNorm;
+//         normComponent   0;
+//
+//         nPreSweeps      2;
+//         nPostSweeps     2;
+//         groupSize       2;
+//         minCoarseEqns   4;
+//         nMaxLevels      100;
+//         scale           on;
+//         coarseSmoother  ILU;
+//         fineSmoother    ILU;
+//
+//         minIter         0;
+//         maxIter         100;
+//         tolerance       1e-08;
+//         relTol          0.1;
+//     }
+}
+
+EDDYCURRENT
+{
+    interface                   "conductorSurface";
+
+    nCorrectors                 10;
+    nSubCorrectors              100;
+
+    residualControl
+    {
+        "(Ax|Ay|Az)"
+        {
+            tolerance           1e-05;
+            relTol              1e-02;
+        }
+
+        "(VRe|VIm)"
+        {
+            tolerance           1e-05;
+            relTol              1e-02;
+        }
+    }
+
+    emUpdate
+    {
+        enabled                 yes;
+
+        outputTimeIndexCycle    10;
+        timeIndexCycle          2147483647;
+        timeCycle               1e+300;
+
+        relDeltaAmax            0.10;
+    }
+}
+
+relaxationFactors
+{
+}
+
+// ************************************************************************* //

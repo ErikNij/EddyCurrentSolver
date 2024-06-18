@@ -1,0 +1,46 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      funkySetBoundaryDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+temperature_gradient
+{
+    field                 T;
+
+    expressions
+    (
+        {
+            target        value;
+            patchName     "topWall";
+            expression    "5.0*pow(pos().x/0.053,2) + 5.0";
+        }
+        {
+            target        value;
+            patchName     "sideWall";
+            expression    "5.0*pow((pos().z-0.022)/(0.070-0.022),3) + 5.0";
+        }
+        {
+            target        value;
+            patchName     "cornerWall";
+            expression    "5.0*(pos().z-0.022)/(0.030-0.022)";
+        }
+        {
+            target        value;
+            patchName     "solidWall";
+            expression    "10.0*((pos().z-0.022)/0.022)";
+        }
+    );
+}
+
+// ************************************************************************* //

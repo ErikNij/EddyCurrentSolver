@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Remove old featureEdgeMesh
+rm -rf constant/featureEdgeMesh
+
+# Get blockMeshDict.py script from storage folder
+mkdir 'constant/featureEdgeMesh'
+cp -r 'constant/featureEdgeMesh.org/coil.py' 'constant/featureEdgeMesh/'
+
+# Create coil
+./constant/featureEdgeMesh/coil.py
+
+for eMeshFile in $(ls -1 "constant/featureEdgeMesh/"*".eMesh"); do
+
+    surfaceFeatureConvert "${eMeshFile#'constant/'}" "${eMeshFile%'.eMesh'}.vtk"
+
+done
+
+# Copy new featureEdgeMesh files to storage folder
+cp 'constant/featureEdgeMesh/'*'.eMesh' \
+   'constant/featureEdgeMesh.org/'
+cp 'constant/featureEdgeMesh/'*'.vtk' \
+   'constant/featureEdgeMesh.org/'
+

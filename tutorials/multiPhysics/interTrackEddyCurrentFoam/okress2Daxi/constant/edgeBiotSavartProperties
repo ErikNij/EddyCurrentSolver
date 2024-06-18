@@ -1,0 +1,137 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      edgeBiotSavartProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+nNonOrthogonalCorrectors    10;
+
+// currentAmplitude            23.57022603955158; // 848.528137423857/36
+currentAmplitude            70.71067811865475; // 848.528137423857/12
+
+inductors
+{
+    coil_top0
+    {
+        file       "coil_top0.eMesh";
+        reverse    false;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil_top1
+    {
+        file       "coil_top1.eMesh";
+        reverse    false;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil_top2
+    {
+        file       "coil_top2.eMesh";
+        reverse    false;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil_top3
+    {
+        file       "coil_top3.eMesh";
+        reverse    false;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil_top4
+    {
+        file       "coil_top4.eMesh";
+        reverse    false;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil_top5
+    {
+        file       "coil_top5.eMesh";
+        reverse    false;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil_top6
+    {
+        file       "coil_top6.eMesh";
+        reverse    false;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil_bottom0
+    {
+        file       "coil_bottom0.eMesh";
+        reverse    true;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil_bottom1
+    {
+        file       "coil_bottom1.eMesh";
+        reverse    true;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil_bottom2
+    {
+        file       "coil_bottom2.eMesh";
+        reverse    true;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil_bottom3
+    {
+        file       "coil_bottom3.eMesh";
+        reverse    true;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil_bottom4
+    {
+        file       "coil_bottom4.eMesh";
+        reverse    true;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil_bottom5
+    {
+        file       "coil_bottom5.eMesh";
+        reverse    true;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+
+    coil_bottom6
+    {
+        file       "coil_bottom6.eMesh";
+        reverse    true;
+        current    $currentAmplitude;
+        phase      0.0;
+    }
+}
+
+// ************************************************************************* //

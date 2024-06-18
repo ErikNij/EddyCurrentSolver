@@ -1,0 +1,107 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     3.1                                |
+|   \\  /    A nd           | Web:         http://www.extend-project.de       |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    pFinal
+//     {
+//         solver                   PCG;
+//         tolerance                1e-08;
+//         relTol                   0;
+//         preconditioner           DIC;
+//     }
+    {
+        solver                   GAMG;
+        tolerance                1e-08;
+        relTol                   0.0;
+        smoother                 DICGaussSeidel;
+        nPreSweeps               0;
+        nPostSweeps              2;
+        cacheAgglomeration       on;
+        agglomerator             faceAreaPair;
+        nCellsInCoarsestLevel    200;
+        mergeLevels              1;
+    }
+
+    p { $pFinal; relTol 1e-03; }
+
+    "(UFinal|epsilon|omega|k|nuTilda)"
+    {
+        solver                   PBiCG;
+        tolerance                1e-08;
+        relTol                   0;
+        preconditioner           DILU;
+    }
+
+    U { $UFinal; relTol 1e-3; }
+
+    cellMotionU
+//     {
+//         solver                   PCG;
+//         tolerance                1e-09;
+//         relTol                   1e-03;
+//         preconditioner           DIC;
+//     }
+    {
+        solver                   GAMG;
+        tolerance                1e-09;
+        relTol                   1e-03;
+        smoother                 DICGaussSeidel;
+        nPreSweeps               0;
+        nPostSweeps              2;
+        cacheAgglomeration       on;
+        agglomerator             faceAreaPair;
+        nCellsInCoarsestLevel    200;
+        mergeLevels              1;
+    }
+}
+
+PIMPLE
+{
+    methodUp                     "default";
+
+    nOuterCorrectors             5;
+    nCorrectors                  2;
+    nNonOrthogonalCorrectors     3;
+
+    nMinOuterCorr                2;
+    maxRelVolErr                 1e-03;
+
+    maxConvectiveCo              0.1;
+    maxInterfaceCo               0.6;
+
+    removeSwirl                  -1;
+
+    volumeCorrectionByHeight
+    {
+        heightCoord              2;
+        relThreshold             0;
+    }
+
+    lorentzForce
+    {
+        rotationalFactor         0.0;
+        volumeFactor             1.0;
+    }
+}
+
+relaxationFactors
+{
+    p                            0.9;
+    U                            0.9;
+}
+
+// ************************************************************************* //

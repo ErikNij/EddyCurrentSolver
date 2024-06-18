@@ -1,0 +1,72 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default                           none;
+}
+
+gradSchemes
+{
+    default                           none;
+
+    curl(A0Re)                        Gauss skewCorrected linear;
+    curl(A0Im)                        Gauss skewCorrected linear;
+
+    grad(A0Re)                        Gauss skewCorrected linear;
+    grad(A0Im)                        Gauss skewCorrected linear;
+
+    grad(VRe)                         Gauss skewCorrected fluxConservative sigma ddtAImPhi;
+    grad(VIm)                         Gauss skewCorrected fluxConservative sigma ddtARePhi;
+}
+
+divSchemes
+{
+    default                           none;
+}
+
+laplacianSchemes
+{
+    default                           none;
+
+    laplacian(A0Re)                   Gauss linear corrected;
+    laplacian(A0Im)                   Gauss linear corrected;
+
+    laplacian(sigmaf,VRe)             jumpGauss harmonic sigma ddtAImPhi;
+    laplacian(sigmaf,VIm)             jumpGauss harmonic sigma ddtARePhi;
+
+}
+
+interpolationSchemes
+{
+    default                           none;
+
+    interpolate(sigma)                harmonic;
+
+    interpolate(A0Re)                 skewCorrected linear;
+    interpolate(A0Im)                 skewCorrected linear;
+
+    interpolate(grad(A0Re))           skewCorrected linear;
+    interpolate(grad(A0Im))           skewCorrected linear;
+
+    interpolate(grad(VRe))            skewCorrected linear;
+    interpolate(grad(VIm))            skewCorrected linear;
+
+    interpolate(ARe)                  skewCorrected linear;
+    interpolate(AIm)                  skewCorrected linear;
+}
+
+// ************************************************************************* //

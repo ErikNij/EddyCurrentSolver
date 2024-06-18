@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Source tutorial clean functions
+. $WM_PROJECT_DIR/bin/tools/CleanFunctions
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+# Get application from controlDict
+application=$(grep 'application' system/controlDict | sed 's/^\s*application\s*//g' | sed 's/;$//g');
+
+# Cleanup
+cleanCase
+cleanFaMesh
+
+# Fix bug in foam cleanFaMesh (using bash syntax with #!/bin/sh)
+rm -rf constant/faMesh/faBoundary* 2>/dev/null
+rm -rf constant/faMesh/faceLabels* 2>/dev/null
+
+# Remove polyMesh boundary description
+rm -rf constant/polyMesh/boundary 2>/dev/null
+
+# Remove polyMesh and faMesh
+rm -rf 'constant/polyMesh' > /dev/null 2>&1
+mkdir 'constant/polyMesh' > /dev/null 2>&1
+rm -rf 'constant/faMesh' > /dev/null 2>&1
+mkdir 'constant/faMesh' > /dev/null 2>&1
+
+find -name *Map -delete > /dev/null 2>&1
+find -name *Map.gz -delete > /dev/null 2>&1
+find -name *Addressing -delete > /dev/null 2>&1
+find -name *Addressing.gz -delete > /dev/null 2>&1
+find -name *RegionToRegionAddressing -delete > /dev/null 2>&1
+find -name *RegionToRegionAddressing.gz -delete > /dev/null 2>&1
+
+
+# Remove initial time folder
+rm -rf 0
+
+if [[ $1 != 'clean' ]]; then
+
+    # Recreate initial time folder
+    mkdir 0 || exit 1
+
+    # Restore polymesh from org backup
+    cp -r 'constant/polyMesh.org/'* 'constant/polyMesh' > /dev/null 2>&1
+
+    # Restore faMesh from org backup
+    cp -r 'constant/faMesh.org/'* 'constant/faMesh' > /dev/null 2>&1
+
+    # CheckMesh
+    runApplication checkMesh || exit 1
+
+    # Create faMesh
+    runApplication makeFaMesh || exit 1
+
+    # Copy all data from 0.org to initial time folder
+    cp -r 0.org/* 0 || exit 1
+
+    # Create fa sub mesh
+    runApplication makeFaSubMesh && cp 'system/decomposeParDict.region' 'system/region0_faSubMesh/decomposeParDict'
+
+    # Start solver
+    #runApplication $application
+
+fi
+
+#./Allclean && ./Allrun && decomposePar -cellDist && makeRegionCellDecomposition -region region0_faSubMesh && decomposePar -region region0_faSubMesh && decomposeRegionAddressing -region region0_faSubMesh

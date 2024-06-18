@@ -1,0 +1,30 @@
+EXE_INC = \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I$(LIB_SRC)/edgeMesh/lnInclude \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I$(LIB_SRC)/dynamicMesh/dynamicMesh/lnInclude \
+    -I$(LIB_SRC)/dynamicMesh/dynamicFvMesh/lnInclude \
+    -I$(LIB_SRC)/transportModels \
+    -I$(LIB_SRC)/transportModels/incompressible/lnInclude \
+    -I$(LIB_SRC)/transportModels/interfaceProperties/lnInclude \
+    -I$(LIB_SRC)/turbulenceModels/incompressible/turbulenceModel/lnInclude \
+    -I$(FOAM_USER_SRC)/foamTools/lnInclude \
+    -I$(FOAM_USER_SRC)/regionModel/lnInclude \
+    -I$(FOAM_USER_APP)/solvers/electromagnetics/eddyCurrentFoam/eddyCurrentApp \
+    -I$(FOAM_USER_APP)/solvers/electromagnetics/eddyCurrentFoam/include \
+    -I$(FOAM_USER_APP)/solvers/incompressible/pimpleFoam/pimpleApp \
+    -I$(FOAM_USER_APP)/solvers/multiphase/interFoam/interApp \
+    -I$(FOAM_USER_APP)/solvers/multiphase/interFoam/include \
+    -IinterEddyCurrentApp \
+    -Iinclude
+
+EXE_LIBS = \
+    -lfiniteVolume \
+    -llduSolvers \
+    -linterfaceProperties \
+    -lincompressibleTransportModels \
+    -lincompressibleTurbulenceModel \
+    -lincompressibleRASModels \
+    -lincompressibleLESModels \
+    -L$(FOAM_USER_LIBBIN) -lfoamTools \
+    -L$(FOAM_USER_LIBBIN) -lregionModel

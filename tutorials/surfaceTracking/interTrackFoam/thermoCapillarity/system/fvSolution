@@ -1,0 +1,97 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    "(p)"
+//     {
+//         solver          GAMG;
+//         tolerance       1e-09;
+//         relTol          1e-02;
+//         smoother        DIC;
+//         nPreSweeps      0;
+//         nPostSweeps     2;
+//         nFinestSweeps   2;
+//         cacheAgglomeration true;
+//         nCellsInCoarsestLevel 50;
+//         agglomerator    faceAreaPair;
+//         mergeLevels     1;
+//     }
+    {
+        solver          deflatedPCG;
+        preconditioner  DIC;
+        tolerance       1e-09;
+        relTol          0;
+    }
+
+//     "(p0|pFinal|U0|U)"
+    "(p0|pFinal)"
+    {
+        $p;
+        relTol          0;
+    }
+
+//     "(c)"
+    "(U0|U|c)"
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-09;
+        relTol          0;
+    }
+}
+
+PIMPLE
+{
+    nOuterCorrectors         5;
+    nCorrectors              2;
+    nNonOrthogonalCorrectors 0;
+    pRefPoint                (0.00000000001 -0.00015000001 0);
+    pRefValue                0;
+
+    momentumPredictor yes;
+//     momentumPredictor no;
+
+    residualControl
+    {
+        p0
+        {
+                tolerance  1e-08;
+                relTol     0;
+        }
+        p
+        {
+                tolerance  1e-08;
+                relTol     0;
+        }
+        c
+        {
+                tolerance  1e-08;
+                relTol     0;
+        }
+     }
+}
+
+relaxationFactors
+{
+    U0       0.7;
+    p0       0.3;
+    U        0.7;
+    p        0.3;
+    c        0.7;
+}
+
+// ************************************************************************* //

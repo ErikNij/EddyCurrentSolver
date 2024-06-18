@@ -1,0 +1,80 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// ************************* SIMLUTAITON TIMES ***************************** //
+
+application         interTrackEddyCurrentFoam;
+
+startFrom           latestTime;
+
+startTime           0.0;
+
+stopAt              endTime;
+
+// endTime             3.0;
+endTime             0.01;
+
+// *************************** TIME STEPPING ******************************* //
+
+deltaT              0.0002;
+
+adjustTimeStep      yes;
+
+maxCo               0.3;
+
+maxDeltaT           0.0002;
+
+// *************************** OUTPUT SETTINGS ***************************** //
+
+writeControl        adjustableRunTime;
+// writeControl        timeStep;
+
+writeInterval       0.001;
+// writeInterval       1;
+
+purgeWrite          0;
+
+cycleWrite          0;
+
+writeFormat         binary; // ascii
+// writeFormat         ascii;
+
+writePrecision      8;
+
+writeCompression    uncompressed;
+// writeCompression    compressed;
+
+timeFormat          general;
+
+timePrecision       8;
+
+// **************************** OTHER SETTINGS ***************************** //
+
+runTimeModifiable   yes;
+
+OptimisationSwitches
+{
+//     commsType       nonBlocking;
+    nProcsSimpleSum 0;
+}
+
+// **************************** DEBUG SWITCHES ***************************** //
+
+// *************************** FUNCTION OBJECTS **************************** //
+
+// ******************************* LIBRARIES ******************************* //
+
+// ************************************************************************* //

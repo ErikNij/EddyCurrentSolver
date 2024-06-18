@@ -1,0 +1,99 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    pFinal
+//     {
+//         solver                GAMG;
+//         tolerance             1e-08;
+//         relTol                0;
+//
+//         smoother              GaussSeidel;
+//         nPreSweeps            0;
+//         nPostSweeps           2;
+//         cacheAgglomeration    on;
+//         agglomerator          faceAreaPair;
+//         nCellsInCoarsestLevel 80;
+//         mergeLevels           1;
+//     }
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-08;
+        relTol          0;
+    }
+
+    p { $pFinal; relTol 0.1; }
+
+    "(UFinal|epsilon|omega|k|nuTilda)"
+    {
+        solver                   PBiCG;
+        tolerance                1e-08;
+        relTol                   0;
+        preconditioner           DILU;
+    }
+
+    U { $UFinal; }
+//     U { $UFinal; relTol 1e-02; }
+
+    cellMotionU
+//     {
+//         solver                   PCG;
+//         tolerance                1e-09;
+//         relTol                   1e-03;
+//         preconditioner           DIC;
+//     }
+    {
+        solver                   GAMG;
+        tolerance                1e-09;
+        relTol                   1e-03;
+        smoother                 DICGaussSeidel;
+        nPreSweeps               0;
+        nPostSweeps              2;
+        cacheAgglomeration       on;
+        agglomerator             faceAreaPair;
+        nCellsInCoarsestLevel    80;
+        mergeLevels              1;
+    }
+}
+
+PIMPLE
+{
+    nOuterCorrectors            15;
+    nCorrectors                 1;
+    nNonOrthogonalCorrectors    3;
+    pRefPoint (0.5 0.5 0);
+    pRefValue 0;
+
+    momentumPredictor no;
+
+    residualControl
+    {
+//         U
+//         {
+//                 tolerance  1e-05;
+//                 relTol     1e-02;
+//         }
+        p
+        {
+                tolerance  1e-05;
+                relTol     5e-02;
+        }
+     }
+}
+
+// ************************************************************************* //

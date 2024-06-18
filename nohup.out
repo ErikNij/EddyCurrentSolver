@@ -1,0 +1,4 @@
+./Allwmake: line 9: /user/tools.sh: No such file or directory
++ wmakeLnInclude foamTools
+src/Allwmake: 6: wmakeLnInclude: not found
++ exit 1

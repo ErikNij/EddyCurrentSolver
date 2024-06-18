@@ -1,0 +1,74 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      funkySetFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+materialProperties
+(
+    "sigma_high=1.2e+6;"
+    "sigma_low=1e+5;"
+    "mur_high=10;"
+    "mur_low=1;"
+);
+
+expressions
+(
+    sigma_reset
+    {
+        field         sigma;
+        variables     $materialProperties;
+        expression    "0";
+        keepPatches   true;
+    }
+
+    sigma_conductor0
+    {
+        field         sigma;
+        variables     $materialProperties;
+        condition     "set(cellSet_material_conductor0)";
+//         expression    "sigma_low";
+        expression    "sigma_high";
+        keepPatches   true;
+    }
+
+    sigma_conductor1
+    {
+        field         sigma;
+        variables     $materialProperties;
+        condition     "set(cellSet_material_conductor1)";
+        expression    "sigma_high";
+        keepPatches   true;
+    }
+
+    mur_conductor0
+    {
+        field         mur;
+        variables     $materialProperties;
+        condition     "set(cellSet_material_conductor0)";
+//         expression    "mur_low";
+        expression    "mur_high";
+        keepPatches   true;
+    }
+
+    mur_conductor1
+    {
+        field         mur;
+        variables     $materialProperties;
+        condition     "set(cellSet_material_conductor1)";
+        expression    "mur_low";
+        keepPatches   true;
+    }
+);
+
+// ************************************************************************* //

@@ -1,0 +1,41 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     4.0                                |
+|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
+|    \\/     M anipulation  | For copyright notice see file Copyright         |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      decomposeParDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#include "decomposeParDict.include"
+
+preserveFaceSets        (faceSet_regions);
+
+method                  vectorMetis;
+
+metisCoeffs
+{
+//     method              recursive; // k-way
+
+    regionBalancing      yes;
+
+    regionCellSets
+    (
+        cellSet_region_fluid
+        cellSet_region_fluid_faSubMesh
+        cellSet_region_buffer
+    );
+
+    regionWeightFactors (10.0);
+
+    imbalanceTolerances (1.003);
+}
+
+// ************************************************************************* //
