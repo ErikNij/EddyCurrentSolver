@@ -58,7 +58,7 @@ you will likely need to resize it. Currently, sizes are x = 104mm, y = 154mm z =
 `Y:0.077`
 `Z:0.0675`
 
-You will also need to move it in the positive z direction y 0.0225.
+You will also need to move it in the positive z direction by `0.0225`
 
 To do the inverse, you will need the boolean modifier. To add a modifier you go to the modifiers tab on blender, which is the wrench one below the orange box.
 The add modifier > boolean. Then make sure the difference is selected. For object, select your workpiece. I don't know what solver is better, but I did exact. It should then be done.
