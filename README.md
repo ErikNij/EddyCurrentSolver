@@ -54,9 +54,9 @@ You may be wondering how to create an STL file,  especially, the inverse. Well, 
 Let's say you have a workpiece, that's good. Let's assume it's in STL. Go to blender and open that STL. 
 then add a cube, this can be done by going to modeling > add > mesh > cube
 you will likely need to resize it. Currently, sizes are x = 104mm, y = 154mm z = 135mm. This can be done by going to the right to the orange box, and change the scale. However, the scale is half the dimensions of the cube, so you need:
-X:0.052
-Y:0.077
-Z:0.0675
+`X:0.052`
+`Y:0.077`
+`Z:0.0675`
 
 You will also need to move it in the positive z direction y 0.0225.
 
