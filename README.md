@@ -8,9 +8,9 @@ If you just want to run it, then you need to foam extend 4.1, and OpenFOAM (.org
 
 The tutorial "inductionHeating" under electromagnetics is what I have been working on the most on. You can try to copy this to your run folder and follow the steps below.
 
-1. To run the most simple case, we need to prepare the coil, mesh, and sets, then run the case. To do this, copy the tutorial to your run folder, and navigate to the folder. First `source fe41`, then do `./Allrun.coil`, now the coil is created.
-2. Now we need to mesh the case. To do this, we use snappyHexMesh, however foam-extend does not have the most up to date version of snappyHexMesh, so we will switch to OpenFOAM (.org or .com) to use it. to do this, you need to `source openFoam` After sourcing, do `./Allrun.mesh`. This can take a few minutes, depending on the complexity of the mesh you have and the detail you are trying to render it at.  
-3. For the rest of the steps, we will use foam-extend and other custom functions that are saved in the foam-extend folder, so `source fe41` for to do the rest of the steps. The next few commands are done with `./Allrun <flag>`. There are many flags, you can see them in the ./Allrun file. They are:
+1. To run the most simple case, we need to prepare the coil, mesh, and sets, then run the case. To do this, copy the tutorial to your run folder, and navigate to the folder. First source `fe41`, then do `./Allrun.coil`, now the coil is created.
+2. Now we need to mesh the case. To do this, we use snappyHexMesh, however foam-extend does not have the most up to date version of snappyHexMesh, so we will switch to OpenFOAM (.org or .com) to use it. to do this, you need to source `of` After sourcing, do `./Allrun.mesh`. This can take a few minutes, depending on the complexity of the mesh you have and the detail you are trying to render it at.  
+3. For the rest of the steps, we will use foam-extend and other custom functions that are saved in the foam-extend folder, so source `fe41` for to do the rest of the steps. The next few commands are done with `./Allrun <flag>`. There are many flags, you can see them in the ./Allrun file. They are:
    - `clean`
    - `prepare`
    - `decompose`
