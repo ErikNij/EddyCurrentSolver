@@ -69,4 +69,10 @@ Done!
 
 If the solver fails, here are some things to check.
 
-1) If it fails around the trying to calculate the A0, then your coil could be ill defined. Make sure that the coil r is slightly greater than x & y. 
+1) If it fails around the trying to calculate the A0, then your coil could be ill defined. Make sure that the coil r is slightly greater than x & y.
+2) If the snappyHexMesh fails saying:
+   `--> FOAM FATAL ERROR: (openfoam-2212)
+   Shell geometry_buffer.stl does not support testing for inside
+   Probably it is not closed.`
+
+   Then, you either have an open mesh, or overlapping meshs. Open meshs can be fixed by looking up online, however this is rarly the problem. Often, your mesh have overlapping sections. To fix this, load up the stl of your workpeice, and in blender choose the remesh modifer under generate. Keep the mode on voxel, and decrease the voxel size until you are happy with the result. Note: make sure to do this before doing the boolean with the buffer, as remeshing while having the boolean on takes a lot more computing power. 
