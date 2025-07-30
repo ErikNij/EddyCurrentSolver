@@ -1,4 +1,4 @@
-##This is not the most updated version, for that look on my profile for EddyCurrentFoam-5.0
+## This is not the most updated version, for that look on my profile for EddyCurrentFoam-5.0
 
 # EddyCurrentSolver
 
