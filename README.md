@@ -1,3 +1,5 @@
+##This is not the most updated version, for that look on my profile for EddyCurrentFoam-5.0
+
 # EddyCurrentSolver
 
 This is the base case for induction heating simulation based off of [paper name]. While I did not write this code, I will attempt to make some sort of documentation to show how to use this code. 
